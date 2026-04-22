@@ -1,0 +1,96 @@
+{
+  "meta": {
+    "title": "Eunice Beauty Salon | Palmview South, TX",
+    "description": "Where technique and fashion meet. Hair and beauty in Palmview South, Texas. Book online with a $25 deposit."
+  },
+  "cta": {
+    "button": "Book now"
+  },
+  "nav": {
+    "home": "Home",
+    "services": "Services",
+    "book": "Book",
+    "location": "Location",
+    "contact": "Contact",
+    "lang": "Language"
+  },
+  "hero": {
+    "line1": "Where technique and fashion meet.",
+    "line2": "We care for your image with passion and precision.",
+    "line3": "— Your new version starts here.",
+    "whatsapp": "WhatsApp",
+    "badgeOpen": "Mon–Sat · 10am–6pm · Sun closed",
+    "badgeReviews": "100% recommend (8 Reviews)"
+  },
+  "services": {
+    "title": "Services",
+    "subtitle": "Tell us what you need when you book—we’ll confirm details before your visit.",
+    "items": {
+      "cut": { "title": "Cut & style", "body": "Cuts, trims, and styling tailored to you." },
+      "color": { "title": "Color", "body": "Color, highlights, and refresh treatments." },
+      "treatments": { "title": "Treatments", "body": "Deep conditioning and care for healthy shine." },
+      "special": { "title": "Special occasion", "body": "Bridal and event styling—book early." }
+    }
+  },
+  "booking": {
+    "metaTitle": "Book — Eunice Beauty Salon",
+    "metaDescription": "Reserve with a $25 deposit. Non-refundable; applies to your visit.",
+    "backHome": "Back to home",
+    "title": "Book with deposit",
+    "subtitle": "A $25 deposit is required to reserve your appointment. Deposits are non-refundable.",
+    "depositLabel": "$25.00 deposit (USD)",
+    "policy": "I understand the $25 deposit is non-refundable and applies toward my appointment.",
+    "name": "Full name",
+    "email": "Email",
+    "phone": "Phone",
+    "service": "Service",
+    "servicePlaceholder": "Select a service",
+    "services": {
+      "cut": "Cut & style",
+      "color": "Color",
+      "treatments": "Treatments",
+      "special": "Special occasion",
+      "other": "Other"
+    },
+    "slot": "Date & time",
+    "slotPlaceholder": "Choose an available slot",
+    "note": "Notes (optional)",
+    "cardTitle": "Card",
+    "pay": "Pay deposit & book",
+    "loadingSlots": "Loading available times…",
+    "noSlots": "No open slots in this window. Call us to find a time.",
+    "squareLoadError": "Could not load payment form. Check your connection and Square settings.",
+    "errors": {
+      "terms": "Please accept the deposit policy to continue.",
+      "fill": "Please complete all required fields.",
+      "payment": "Payment could not be completed. Try another card or call us.",
+      "network": "Network error—try again."
+    }
+  },
+  "confirmed": {
+    "metaTitle": "Booking confirmed | Eunice Beauty Salon",
+    "metaDescription": "Your deposit was received. We’ll see you at Eunice Beauty Salon.",
+    "title": "You’re all set",
+    "body": "Your deposit went through. We saved your contact details to Square and we’ll follow up by email if we need anything else.",
+    "ref": "Payment reference",
+    "squareProfile": "Your profile is linked in Square with this booking.",
+    "back": "Return home"
+  },
+  "map": {
+    "title": "Find us",
+    "openMaps": "Open in Google Maps"
+  },
+  "contact": {
+    "title": "Contact",
+    "call": "Call",
+    "instagram": "Instagram",
+    "email": "Email",
+    "hoursTitle": "Hours",
+    "hoursBody": "Monday–Saturday: 10:00 AM – 6:00 PM\nSunday: Closed"
+  },
+  "footer": {
+    "category": "Beauty, cosmetic & personal care",
+    "rights": "© {{year}} Eunice Beauty Salon"
+  },
+  "address": "1114 W Veterans Blvd, Palmview South, TX, United States"
+}

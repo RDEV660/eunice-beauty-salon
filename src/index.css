@@ -1,0 +1,37 @@
+@import "tailwindcss";
+
+@theme {
+  --font-serif: "Playfair Display", Georgia, "Times New Roman", serif;
+  --font-condensed: "Oswald", system-ui, sans-serif;
+  --color-gold-100: #fffef7;
+  --color-gold-200: #fff4cc;
+  --color-gold-300: #ffe89a;
+  --color-gold-400: #f0c82e;
+  --color-gold-500: #e0b008;
+}
+
+.card-lift {
+  transition:
+    transform 0.45s cubic-bezier(0.22, 1, 0.36, 1),
+    border-color 0.35s ease,
+    box-shadow 0.45s ease;
+}
+
+.card-lift:hover {
+  transform: translateY(-4px);
+  box-shadow:
+    0 20px 50px rgba(0, 0, 0, 0.45),
+    0 0 40px rgba(240, 200, 60, 0.12);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .card-lift:hover {
+    transform: none;
+  }
+}
+
+body {
+  margin: 0;
+  background-color: #050505;
+  color: #fafafa;
+}

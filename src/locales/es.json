@@ -1,0 +1,96 @@
+{
+  "meta": {
+    "title": "Eunice Beauty Salon | Palmview South, TX",
+    "description": "Donde la técnica y la moda se encuentran. Belleza en Palmview Sur, Texas. Reserva en línea con depósito de $25."
+  },
+  "cta": {
+    "button": "Reservar ahora"
+  },
+  "nav": {
+    "home": "Inicio",
+    "services": "Servicios",
+    "book": "Reservar",
+    "location": "Ubicación",
+    "contact": "Contacto",
+    "lang": "Idioma"
+  },
+  "hero": {
+    "line1": "Donde la técnica y la moda se encuentran.",
+    "line2": "Cuidamos tu imagen con pasión y precisión.",
+    "line3": "— Tu nueva versión empieza aquí.",
+    "whatsapp": "WhatsApp",
+    "badgeOpen": "Lun–Sáb · 10am–6pm · Dom cerrado",
+    "badgeReviews": "100% recomendado (8 reseñas)"
+  },
+  "services": {
+    "title": "Servicios",
+    "subtitle": "Indica lo que necesitas al reservar—confirmamos los detalles antes de tu cita.",
+    "items": {
+      "cut": { "title": "Corte y peinado", "body": "Cortes, retoques y estilos pensados para ti." },
+      "color": { "title": "Color", "body": "Color, mechas y tratamientos de brillo." },
+      "treatments": { "title": "Tratamientos", "body": "Hidratación profunda y cuidado para un brillo saludable." },
+      "special": { "title": "Ocasión especial", "body": "Novias y eventos—reserva con anticipación." }
+    }
+  },
+  "booking": {
+    "metaTitle": "Reservar — Eunice Beauty Salon",
+    "metaDescription": "Apartar con depósito de $25. No reembolsable; se aplica a tu visita.",
+    "backHome": "Volver al inicio",
+    "title": "Reserva con depósito",
+    "subtitle": "Se requiere un depósito de $25 para apartar tu cita. Los depósitos no son reembolsables.",
+    "depositLabel": "Depósito de $25.00 (USD)",
+    "policy": "Entiendo que el depósito de $25 no es reembolsable y se aplica a mi cita.",
+    "name": "Nombre completo",
+    "email": "Correo",
+    "phone": "Teléfono",
+    "service": "Servicio",
+    "servicePlaceholder": "Elige un servicio",
+    "services": {
+      "cut": "Corte y peinado",
+      "color": "Color",
+      "treatments": "Tratamientos",
+      "special": "Ocasión especial",
+      "other": "Otro"
+    },
+    "slot": "Fecha y hora",
+    "slotPlaceholder": "Elige un horario disponible",
+    "note": "Notas (opcional)",
+    "cardTitle": "Tarjeta",
+    "pay": "Pagar depósito y reservar",
+    "loadingSlots": "Cargando horarios…",
+    "noSlots": "No hay horarios en este periodo. Llámanos para coordinar.",
+    "squareLoadError": "No se pudo cargar el pago. Revisa la conexión y la configuración de Square.",
+    "errors": {
+      "terms": "Acepta la política del depósito para continuar.",
+      "fill": "Completa todos los campos obligatorios.",
+      "payment": "No se pudo completar el pago. Prueba otra tarjeta o llámanos.",
+      "network": "Error de red—intenta de nuevo."
+    }
+  },
+  "confirmed": {
+    "metaTitle": "Reserva confirmada | Eunice Beauty Salon",
+    "metaDescription": "Recibimos tu depósito. Te esperamos en Eunice Beauty Salon.",
+    "title": "Todo listo",
+    "body": "Tu depósito se procesó correctamente. Guardamos tus datos de contacto en Square y te escribiremos si necesitamos algo más.",
+    "ref": "Referencia de pago",
+    "squareProfile": "Tu perfil quedó vinculado en Square con esta reserva.",
+    "back": "Volver al inicio"
+  },
+  "map": {
+    "title": "Ubicación",
+    "openMaps": "Abrir en Google Maps"
+  },
+  "contact": {
+    "title": "Contacto",
+    "call": "Llamar",
+    "instagram": "Instagram",
+    "email": "Correo",
+    "hoursTitle": "Horario",
+    "hoursBody": "Lunes a sábado: 10:00 a. m. – 6:00 p. m.\nDomingo: Cerrado"
+  },
+  "footer": {
+    "category": "Belleza, cosméticos y cuidado personal",
+    "rights": "© {{year}} Eunice Beauty Salon"
+  },
+  "address": "1114 W Veterans Blvd, Palmview Sur, TX, Estados Unidos"
+}
