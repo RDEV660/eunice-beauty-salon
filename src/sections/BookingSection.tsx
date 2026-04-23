@@ -17,6 +17,9 @@ function isSquareProductionEnv(): boolean {
 const SQUARE_CDN_SANDBOX = 'https://sandbox.web.squarecdn.com/v1/square.js'
 const SQUARE_CDN_PRODUCTION = 'https://web.squarecdn.com/v1/square.js'
 
+/** When the API returns no bookable times, we still take a deposit with a TBD machine-readable slot. */
+const SLOT_TBD = '2100-01-01T12:00:00.000Z'
+
 /**
  * Sandbox Application IDs (e.g. `sandbox-sq0idb-...`) must use the sandbox CDN,
  * even if VITE_SQUARE_ENVIRONMENT is mistakenly set to `production` on the host.
@@ -79,6 +82,8 @@ export function BookingSection() {
 
   const [slots, setSlots] = useState<string[]>([])
   const [slotsLoading, setSlotsLoading] = useState(true)
+  const [slotsLoadFailed, setSlotsLoadFailed] = useState(false)
+  const [flexPreferred, setFlexPreferred] = useState('')
   const [squareReady, setSquareReady] = useState(false)
   const [squareError, setSquareError] = useState<string | null>(null)
 
@@ -99,10 +104,23 @@ export function BookingSection() {
     ;(async () => {
       try {
         const r = await fetch(apiUrl('/api/slots?days=14'))
-        const data = (await r.json()) as { slots?: string[] }
-        if (!cancelled) setSlots(data.slots ?? [])
+        if (!r.ok) {
+          if (!cancelled) {
+            setSlotsLoadFailed(true)
+            setSlots([])
+          }
+        } else {
+          const data = (await r.json()) as { slots?: string[] }
+          if (!cancelled) {
+            setSlotsLoadFailed(false)
+            setSlots(data.slots ?? [])
+          }
+        }
       } catch {
-        if (!cancelled) setSlots([])
+        if (!cancelled) {
+          setSlotsLoadFailed(true)
+          setSlots([])
+        }
       } finally {
         if (!cancelled) setSlotsLoading(false)
       }
@@ -226,9 +244,24 @@ export function BookingSection() {
       setMessage({ type: 'err', text: t('booking.errors.terms') })
       return
     }
-    if (!name.trim() || !email.trim() || !phone.trim() || !slot) {
+    if (!name.trim() || !email.trim() || !phone.trim()) {
       setMessage({ type: 'err', text: t('booking.errors.fill') })
       return
+    }
+    if (slotsLoadFailed) {
+      setMessage({ type: 'err', text: t('booking.slotsApiError') })
+      return
+    }
+    if (slots.length > 0) {
+      if (!slot) {
+        setMessage({ type: 'err', text: t('booking.errors.fill') })
+        return
+      }
+    } else {
+      if (!flexPreferred.trim()) {
+        setMessage({ type: 'err', text: t('booking.errors.preferredTime') })
+        return
+      }
     }
     if (missingSquareConfig || !cardRef.current || !squareReady) {
       setMessage({ type: 'err', text: t('booking.squareLoadError') })
@@ -244,6 +277,14 @@ export function BookingSection() {
         return
       }
 
+      const slotStart = slots.length > 0 ? slot : SLOT_TBD
+      const noteParts: string[] = []
+      if (slots.length === 0 && flexPreferred.trim()) {
+        noteParts.push(t('booking.preferredTimeNote', { time: flexPreferred.trim() }))
+      }
+      if (note.trim()) noteParts.push(note.trim())
+      const noteCombined = noteParts.length > 0 ? noteParts.join('\n\n') : undefined
+
       const idempotencyKey = crypto.randomUUID()
       const res = await fetch(apiUrl('/api/payments/deposit'), {
         method: 'POST',
@@ -255,9 +296,9 @@ export function BookingSection() {
           email: email.trim(),
           phone: phone.trim(),
           service: `${serviceLabel()} (${service})`,
-          slotStart: slot,
+          slotStart,
           termsAccepted: true,
-          note: note.trim() || undefined,
+          note: noteCombined,
         }),
       })
 
@@ -294,13 +335,17 @@ export function BookingSection() {
     ? t('booking.squareConfigMissing')
     : squareError
 
+  const timeSelected =
+    !slotsLoadFailed && (slots.length > 0 ? !!slot : flexPreferred.trim().length > 0)
+
   const payDisabled =
     submitting ||
     missingSquareConfig ||
     !squareReady ||
     !!squareError ||
     slotsLoading ||
-    slots.length === 0
+    slotsLoadFailed ||
+    !timeSelected
 
   return (
     <MotionSection
@@ -380,8 +425,22 @@ export function BookingSection() {
             </span>
             {slotsLoading ? (
               <p className="text-sm text-white/55">{t('booking.loadingSlots')}</p>
+            ) : slotsLoadFailed ? (
+              <p className="text-sm text-red-200/90" role="alert">
+                {t('booking.slotsApiError')}
+              </p>
             ) : slots.length === 0 ? (
-              <p className="text-sm text-amber-200/80">{t('booking.noSlots')}</p>
+              <div className="flex flex-col gap-2">
+                <p className="text-sm text-amber-200/80">{t('booking.noSlots')}</p>
+                <input
+                  required
+                  value={flexPreferred}
+                  onChange={(e) => setFlexPreferred(e.target.value)}
+                  placeholder={t('booking.preferredTimePlaceholder')}
+                  className="rounded-lg border border-white/15 bg-black/80 px-3 py-2.5 text-white outline-none ring-gold-400/40 placeholder:text-white/40 focus:ring-2"
+                />
+                <p className="text-xs text-white/55">{t('booking.preferredTimeHelp')}</p>
+              </div>
             ) : (
               <select
                 required

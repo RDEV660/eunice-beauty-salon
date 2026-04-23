@@ -58,13 +58,18 @@
     "cardTitle": "Tarjeta",
     "pay": "Pagar depósito y reservar",
     "loadingSlots": "Cargando horarios…",
-    "noSlots": "No hay horarios en este periodo. Llámanos para coordinar.",
+    "noSlots": "No aparecen horarios libres en el calendario en línea (próximas dos semanas) — escribe abajo tu horario preferido para pagar la señal, o llámanos.",
+    "slotsApiError": "No pudimos cargar el calendario: el API de reservas no respondió. En producción configura VITE_API_BASE con la URL del API y vuelve a desplegar. Mientras, llámanos para reservar.",
+    "preferredTimePlaceholder": "p. ej. sábado 8 feb, por la tarde",
+    "preferredTimeHelp": "Confirmaremos tu cita por teléfono o mensaje. La señal sigue aplicando a tu visita.",
+    "preferredTimeNote": "Horario preferido: {{time}}",
     "squareConfigMissing": "El pago no está configurado. Añade VITE_SQUARE_APPLICATION_ID y VITE_SQUARE_LOCATION_ID al build y vuelve a desplegar.",
     "squareLoadError": "No se pudo cargar el pago. Revisa la conexión, sandbox vs producción (VITE_SQUARE_ENVIRONMENT) y que el ID de aplicación y local coincidan con ese entorno.",
     "squareLoadErrorDetail": "{{detail}}. Si sigue fallando, abre la consola del navegador (F12) y asegúrate de haber redeployed en Vercel tras cambiar variables VITE_.",
     "errors": {
       "terms": "Acepta la política del depósito para continuar.",
       "fill": "Completa todos los campos obligatorios.",
+      "preferredTime": "Escribe la fecha y hora que te convienen.",
       "payment": "No se pudo completar el pago. Prueba otra tarjeta o llámanos.",
       "network": "Error de red—intenta de nuevo."
     }

@@ -58,13 +58,18 @@
     "cardTitle": "Card",
     "pay": "Pay deposit & book",
     "loadingSlots": "Loading available times…",
-    "noSlots": "No open slots in this window. Call us to find a time.",
+    "noSlots": "No open times showed in the online calendar for the next two weeks — enter your preferred time below to pay the deposit, or call us.",
+    "slotsApiError": "We couldn’t load the calendar because the booking API didn’t respond. The live site must set VITE_API_BASE to your API URL (then redeploy). Until then, call us to book.",
+    "preferredTimePlaceholder": "e.g. Saturday, Feb 8 — afternoon",
+    "preferredTimeHelp": "We’ll confirm your visit by phone or message. Your deposit still holds your spot.",
+    "preferredTimeNote": "Preferred time: {{time}}",
     "squareConfigMissing": "Payment form is not configured. Add VITE_SQUARE_APPLICATION_ID and VITE_SQUARE_LOCATION_ID to the site build, then redeploy.",
     "squareLoadError": "Could not load payment form. Check your connection, sandbox vs production (VITE_SQUARE_ENVIRONMENT), and that the Application and Location IDs match that environment.",
     "squareLoadErrorDetail": "{{detail}}. If this persists, open the browser console (F12) and confirm Vercel was rebuilt after changing VITE_ variables.",
     "errors": {
       "terms": "Please accept the deposit policy to continue.",
       "fill": "Please complete all required fields.",
+      "preferredTime": "Please enter your preferred date and time.",
       "payment": "Payment could not be completed. Try another card or call us.",
       "network": "Network error—try again."
     }
