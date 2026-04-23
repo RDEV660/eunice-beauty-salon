@@ -59,7 +59,8 @@
     "pay": "Pagar depósito y reservar",
     "loadingSlots": "Cargando horarios…",
     "noSlots": "No hay horarios en este periodo. Llámanos para coordinar.",
-    "squareLoadError": "No se pudo cargar el pago. Revisa la conexión y la configuración de Square.",
+    "squareConfigMissing": "El pago no está configurado. Añade VITE_SQUARE_APPLICATION_ID y VITE_SQUARE_LOCATION_ID al build y vuelve a desplegar.",
+    "squareLoadError": "No se pudo cargar el pago. Revisa la conexión, sandbox vs producción (VITE_SQUARE_ENVIRONMENT) y que el ID de aplicación y local coincidan con ese entorno.",
     "errors": {
       "terms": "Acepta la política del depósito para continuar.",
       "fill": "Completa todos los campos obligatorios.",

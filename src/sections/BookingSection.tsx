@@ -6,8 +6,16 @@ import { apiUrl } from '../lib/api'
 
 const SERVICE_KEYS = ['cut', 'color', 'treatments', 'special', 'other'] as const
 
+function isSquareProductionEnv(): boolean {
+  return (
+    String(import.meta.env.VITE_SQUARE_ENVIRONMENT ?? '')
+      .trim()
+      .toLowerCase() === 'production'
+  )
+}
+
 function squareScriptUrl(): string {
-  return import.meta.env.VITE_SQUARE_ENVIRONMENT === 'production'
+  return isSquareProductionEnv()
     ? 'https://web.squarecdn.com/v1/square.js'
     : 'https://sandbox.web.squarecdn.com/v1/square.js'
 }
@@ -50,9 +58,9 @@ export function BookingSection() {
   const reactId = useId()
   const cardContainerId = `sq-card-${reactId.replace(/:/g, '')}`
 
-  const appId = import.meta.env.VITE_SQUARE_APPLICATION_ID
-  const locationId = import.meta.env.VITE_SQUARE_LOCATION_ID
-  const missingSquareConfig = !appId?.trim() || !locationId?.trim()
+  const appId = (import.meta.env.VITE_SQUARE_APPLICATION_ID ?? '').trim()
+  const locationId = (import.meta.env.VITE_SQUARE_LOCATION_ID ?? '').trim()
+  const missingSquareConfig = !appId || !locationId
 
   const cardRef = useRef<CardHandle | null>(null)
 
@@ -103,8 +111,15 @@ export function BookingSection() {
       try {
         await loadSquareScript()
         if (cancelled) return
-        const Sq = (window as unknown as { Square?: SquareGlobal }).Square
+        // Script may set `window.Square` on the next tick
+        let Sq: SquareGlobal | undefined
+        for (let i = 0; i < 10; i++) {
+          Sq = (window as unknown as { Square?: SquareGlobal }).Square
+          if (Sq) break
+          await new Promise((r) => setTimeout(r, 30))
+        }
         if (!Sq) {
+          console.error('Square: window.Square missing after loadSquareScript()')
           setSquareError(t('booking.squareLoadError'))
           return
         }
@@ -131,7 +146,8 @@ export function BookingSection() {
         cardRef.current = c
         setSquareError(null)
         setSquareReady(true)
-      } catch {
+      } catch (err) {
+        console.error('Square Web Payments init failed', err)
         if (!cancelled) {
           setSquareError(t('booking.squareLoadError'))
           setSquareReady(false)
@@ -236,7 +252,9 @@ export function BookingSection() {
     }
   }
 
-  const displaySquareError = missingSquareConfig ? t('booking.squareLoadError') : squareError
+  const displaySquareError = missingSquareConfig
+    ? t('booking.squareConfigMissing')
+    : squareError
 
   const payDisabled =
     submitting ||

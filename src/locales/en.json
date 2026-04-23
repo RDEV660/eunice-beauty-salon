@@ -59,7 +59,8 @@
     "pay": "Pay deposit & book",
     "loadingSlots": "Loading available times…",
     "noSlots": "No open slots in this window. Call us to find a time.",
-    "squareLoadError": "Could not load payment form. Check your connection and Square settings.",
+    "squareConfigMissing": "Payment form is not configured. Add VITE_SQUARE_APPLICATION_ID and VITE_SQUARE_LOCATION_ID to the site build, then redeploy.",
+    "squareLoadError": "Could not load payment form. Check your connection, sandbox vs production (VITE_SQUARE_ENVIRONMENT), and that the Application and Location IDs match that environment.",
     "errors": {
       "terms": "Please accept the deposit policy to continue.",
       "fill": "Please complete all required fields.",
