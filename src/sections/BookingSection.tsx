@@ -1,4 +1,4 @@
-import { useId, useEffect, useRef, useState } from 'react'
+import { useId, useEffect, useLayoutEffect, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useNavigate } from 'react-router-dom'
 import { MotionSection } from '../components/MotionSection'
@@ -112,13 +112,21 @@ export function BookingSection() {
     }
   }, [])
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     if (missingSquareConfig) return
 
     let cancelled = false
     void Promise.resolve().then(() => {
       if (!cancelled) setSquareReady(false)
     })
+
+    const reasonIfAny = (err: unknown): string | null => {
+      if (err instanceof Error) {
+        const m = err.message?.trim() ?? ''
+        if (m && m.length < 180 && !/\n\s+at\s/.test(m)) return m
+      }
+      return null
+    }
 
     ;(async () => {
       try {
@@ -133,6 +141,12 @@ export function BookingSection() {
         }
         if (!Sq) {
           console.error('Square: window.Square missing after loadSquareScript()')
+          setSquareError(t('booking.squareLoadError'))
+          return
+        }
+        const mountNode = document.getElementById(cardContainerId)
+        if (!mountNode) {
+          console.error('Square: card mount node not in DOM', cardContainerId)
           setSquareError(t('booking.squareLoadError'))
           return
         }
@@ -162,7 +176,12 @@ export function BookingSection() {
       } catch (err) {
         console.error('Square Web Payments init failed', err)
         if (!cancelled) {
-          setSquareError(t('booking.squareLoadError'))
+          const extra = reasonIfAny(err)
+          setSquareError(
+            extra
+              ? t('booking.squareLoadErrorDetail', { detail: extra })
+              : t('booking.squareLoadError'),
+          )
           setSquareReady(false)
         }
       }
@@ -280,6 +299,7 @@ export function BookingSection() {
   return (
     <MotionSection
       id="book"
+      entrance="none"
       aria-label={t('booking.title')}
       className="scroll-mt-24 border-y border-gold-400/20 bg-black/40 px-4 py-14 sm:px-6"
     >

@@ -61,6 +61,7 @@
     "noSlots": "No hay horarios en este periodo. Llámanos para coordinar.",
     "squareConfigMissing": "El pago no está configurado. Añade VITE_SQUARE_APPLICATION_ID y VITE_SQUARE_LOCATION_ID al build y vuelve a desplegar.",
     "squareLoadError": "No se pudo cargar el pago. Revisa la conexión, sandbox vs producción (VITE_SQUARE_ENVIRONMENT) y que el ID de aplicación y local coincidan con ese entorno.",
+    "squareLoadErrorDetail": "{{detail}}. Si sigue fallando, abre la consola del navegador (F12) y asegúrate de haber redeployed en Vercel tras cambiar variables VITE_.",
     "errors": {
       "terms": "Acepta la política del depósito para continuar.",
       "fill": "Completa todos los campos obligatorios.",
