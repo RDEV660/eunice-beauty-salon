@@ -14,19 +14,32 @@ function isSquareProductionEnv(): boolean {
   )
 }
 
-function squareScriptUrl(): string {
-  return isSquareProductionEnv()
-    ? 'https://web.squarecdn.com/v1/square.js'
-    : 'https://sandbox.web.squarecdn.com/v1/square.js'
+const SQUARE_CDN_SANDBOX = 'https://sandbox.web.squarecdn.com/v1/square.js'
+const SQUARE_CDN_PRODUCTION = 'https://web.squarecdn.com/v1/square.js'
+
+/**
+ * Sandbox Application IDs (e.g. `sandbox-sq0idb-...`) must use the sandbox CDN,
+ * even if VITE_SQUARE_ENVIRONMENT is mistakenly set to `production` on the host.
+ */
+function squareScriptUrlForApplicationId(appId: string): string {
+  if (/sandbox/i.test(appId)) {
+    if (isSquareProductionEnv()) {
+      console.warn(
+        'Square: Application ID is sandbox, loading sandbox Web Payments SDK (ignoring VITE_SQUARE_ENVIRONMENT=production).',
+      )
+    }
+    return SQUARE_CDN_SANDBOX
+  }
+  return isSquareProductionEnv() ? SQUARE_CDN_PRODUCTION : SQUARE_CDN_SANDBOX
 }
 
-function loadSquareScript(): Promise<void> {
-  if (document.querySelector(`script[src="${squareScriptUrl()}"]`)) {
+function loadSquareScript(src: string): Promise<void> {
+  if (document.querySelector(`script[src="${src}"]`)) {
     return Promise.resolve()
   }
   return new Promise((resolve, reject) => {
     const s = document.createElement('script')
-    s.src = squareScriptUrl()
+    s.src = src
     s.async = true
     s.onload = () => resolve()
     s.onerror = () => reject(new Error('square_script'))
@@ -109,7 +122,7 @@ export function BookingSection() {
 
     ;(async () => {
       try {
-        await loadSquareScript()
+        await loadSquareScript(squareScriptUrlForApplicationId(appId))
         if (cancelled) return
         // Script may set `window.Square` on the next tick
         let Sq: SquareGlobal | undefined
