@@ -156,10 +156,16 @@ export function BookingSection() {
             '.input-container': {
               borderColor: 'rgba(212, 175, 55, 0.35)',
               borderRadius: '8px',
-              color: '#fff',
             },
             '.input-container.is-focus': {
               borderColor: 'rgba(212, 175, 55, 0.85)',
+            },
+            input: {
+              color: '#fff',
+              backgroundColor: 'rgba(0, 0, 0, 0.45)',
+            },
+            'input::placeholder': {
+              color: 'rgba(255, 255, 255, 0.45)',
             },
             '.message-text': { color: '#f87171' },
             '.message-icon': { color: '#f87171' },
