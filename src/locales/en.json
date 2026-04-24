@@ -15,22 +15,27 @@
     "lang": "Language"
   },
   "hero": {
-    "line1": "Where technique and fashion meet.",
-    "line2": "We care for your image with passion and precision.",
-    "line3": "— Your new version starts here.",
+    "brand": "EUNICE BEAUTY SALON ✨",
+    "line1": "Walk-ins welcome for the whole family 👨‍👩‍👧‍👦💇🏻‍♀️👑",
+    "line2": "📍 1114 West Veterans Blvd, Palmview, TX",
+    "line3": "Where your look transforms and your confidence shines ✨",
+    "line4": "At Eunice Beauty Salon we believe everyone deserves to feel safe, elegant, and renewed—professional services, quality products, and a unique experience for you and your family 💖",
     "whatsapp": "WhatsApp",
+    "tiktok": "TikTok",
     "badgeOpen": "Mon–Sat · 10am–6pm · Sun closed",
-    "badgeReviews": "100% recommend (8 Reviews)"
+    "badgeWalkins": "Appointments & walk-ins",
+    "badgeReviews": "100% recommend (8 reviews)"
   },
   "services": {
-    "title": "Services",
-    "subtitle": "Tell us what you need when you book—we’ll confirm details before your visit.",
-    "items": {
-      "cut": { "title": "Cut & style", "body": "Cuts, trims, and styling tailored to you." },
-      "color": { "title": "Color", "body": "Color, highlights, and refresh treatments." },
-      "treatments": { "title": "Treatments", "body": "Deep conditioning and care for healthy shine." },
-      "special": { "title": "Special occasion", "body": "Bridal and event styling—book early." }
-    }
+    "title": "🌟 Our services 🌟",
+    "subtitle": "Modern techniques, personalized care, and a professional space so you leave feeling your best.",
+    "hairTitle": "💇‍♀️ Hair",
+    "hairBody": "• Women’s and men’s cuts\n• Professional trims\n• Layers — long, short, and in between\n• Color correction\n• Balayage and highlights\n• All-over color and toners\n• Organic straightening (formaldehyde-free)\n• Hair botox\n• Stem-cell treatments\n• Deep hydration\n• Repair for damaged hair\n• Event styling",
+    "beautyTitle": "💄 Beauty & style",
+    "beautyBody": "• Social and pro makeup\n• Quince and bridal makeup\n• Waxing\n• Image consulting",
+    "closing": "👑 Personalized care, up-to-date techniques, and a professional environment—leave feeling amazing.",
+    "hoursLine": "📅 By appointment, and we welcome walk-ins too.",
+    "tagline": "✨ Your hair is your crown—look incredible every day!"
   },
   "booking": {
     "metaTitle": "Book — Eunice Beauty Salon",

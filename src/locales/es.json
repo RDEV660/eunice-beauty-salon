@@ -15,22 +15,27 @@
     "lang": "Idioma"
   },
   "hero": {
-    "line1": "Donde la técnica y la moda se encuentran.",
-    "line2": "Cuidamos tu imagen con pasión y precisión.",
-    "line3": "— Tu nueva versión empieza aquí.",
+    "brand": "EUNICE BEAUTY SALON ✨",
+    "line1": "Walk-in bienvenido — toda la familia 👨‍👩‍👧‍👦💇🏻‍♀️👑",
+    "line2": "📍 1114 West Veterans Blvd, Palmview, TX",
+    "line3": "Donde tu imagen se transforma y tu confianza brilla ✨",
+    "line4": "En Eunice Beauty Salon creemos que cada persona merece sentirse segura, elegante y renovada. Aquí encuentras servicios profesionales, productos de alta calidad y una experiencia única pensada para ti y tu familia 💖",
     "whatsapp": "WhatsApp",
+    "tiktok": "TikTok",
     "badgeOpen": "Lun–Sáb · 10am–6pm · Dom cerrado",
+    "badgeWalkins": "Citas y walk-in",
     "badgeReviews": "100% recomendado (8 reseñas)"
   },
   "services": {
-    "title": "Servicios",
-    "subtitle": "Indica lo que necesitas al reservar—confirmamos los detalles antes de tu cita.",
-    "items": {
-      "cut": { "title": "Corte y peinado", "body": "Cortes, retoques y estilos pensados para ti." },
-      "color": { "title": "Color", "body": "Color, mechas y tratamientos de brillo." },
-      "treatments": { "title": "Tratamientos", "body": "Hidratación profunda y cuidado para un brillo saludable." },
-      "special": { "title": "Ocasión especial", "body": "Novias y eventos—reserva con anticipación." }
-    }
+    "title": "🌟 NUESTROS SERVICIOS 🌟",
+    "subtitle": "Técnicas modernas, atención personalizada y un ambiente profesional para que salgas sintiéndote espectacular.",
+    "hairTitle": "💇‍♀️ Cabello",
+    "hairBody": "• Cortes de dama y caballero\n• Despuntes profesionales\n• Capas / long layers / short layers\n• Corrección de color\n• Balayage y mechas\n• Tintes y matizaciones\n• Alisados orgánicos libres de formol\n• Botox capilar\n• Tratamientos de células madre\n• Hidrataciones profundas\n• Reparación de cabello maltratado\n• Peinados para eventos y fiestas",
+    "beautyTitle": "💄 Belleza y estilo",
+    "beautyBody": "• Maquillaje social y profesional\n• Maquillaje para quinceañeras y novias\n• Depilación con cera (wax)\n• Diseño de imagen",
+    "closing": "👑 Atención personalizada, técnicas modernas y un ambiente profesional para que salgas sintiéndote espectacular.",
+    "hoursLine": "📅 Citas con reserva y también atendemos sin cita.",
+    "tagline": "✨ Tu cabello es tu corona… ¡luce increíble todos los días!"
   },
   "booking": {
     "metaTitle": "Reservar — Eunice Beauty Salon",
