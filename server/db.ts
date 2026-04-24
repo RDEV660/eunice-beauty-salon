@@ -22,7 +22,6 @@ let db: any = null
 
 export function getDb() {
   if (!db) {
-    // eslint-disable-next-line @typescript-eslint/no-require-imports
     const Database = require('better-sqlite3')
     fs.mkdirSync(path.dirname(dbPath), { recursive: true })
     const instance = new Database(dbPath)
