@@ -1,14 +1,16 @@
 import { motion, useReducedMotion } from 'framer-motion'
 import { useTranslation } from 'react-i18next'
 import { Link } from 'react-router-dom'
+import type { To } from 'react-router-dom'
+import { HeaderNavLink } from './HeaderNavLink'
 import { LanguageSwitch } from './LanguageSwitch'
 
-const homeLinks = [
-  { to: '/#home', key: 'nav.home' as const },
-  { to: '/#services', key: 'nav.services' as const },
-  { to: '/book', key: 'nav.book' as const },
-  { to: '/#location', key: 'nav.location' as const },
-  { to: '/#contact', key: 'nav.contact' as const },
+const homeLinks: { to: To; key: 'nav.home' | 'nav.services' | 'nav.book' | 'nav.location' | 'nav.contact' }[] = [
+  { to: { pathname: '/', hash: '#home' }, key: 'nav.home' },
+  { to: { pathname: '/', hash: '#services' }, key: 'nav.services' },
+  { to: '/book', key: 'nav.book' },
+  { to: { pathname: '/', hash: '#location' }, key: 'nav.location' },
+  { to: { pathname: '/', hash: '#contact' }, key: 'nav.contact' },
 ]
 
 export function Header() {
@@ -37,17 +39,17 @@ export function Header() {
         >
           {homeLinks.map(({ to, key }, i) => (
             <motion.div
-              key={to + key}
+              key={key}
               initial={reduce ? false : { opacity: 0, y: -8 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: reduce ? 0 : 0.04 + i * 0.05, duration: 0.45, ease: [0.22, 1, 0.36, 1] }}
             >
-              <Link
+              <HeaderNavLink
                 to={to}
                 className="rounded-md px-2 py-2 font-condensed text-[0.65rem] font-semibold uppercase tracking-wider text-white/85 transition-colors duration-300 hover:text-gold-300 sm:px-3 sm:text-xs"
               >
                 {t(key)}
-              </Link>
+              </HeaderNavLink>
             </motion.div>
           ))}
         </nav>
@@ -60,13 +62,13 @@ export function Header() {
         aria-label="Primary mobile"
       >
         {homeLinks.map(({ to, key }) => (
-          <Link
-            key={to + key}
+          <HeaderNavLink
+            key={key}
             to={to}
             className="rounded-md px-2 py-1.5 font-condensed text-[0.6rem] font-semibold uppercase tracking-wider text-white/80 transition-colors hover:text-gold-300"
           >
             {t(key)}
-          </Link>
+          </HeaderNavLink>
         ))}
       </nav>
     </motion.header>

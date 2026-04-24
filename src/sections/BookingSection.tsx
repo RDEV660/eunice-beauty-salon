@@ -202,8 +202,10 @@ export function BookingSection() {
     if (missingSquareConfig) return
 
     if (!terms) {
-      setSquareReady(false)
-      setSquareError(null)
+      void queueMicrotask(() => {
+        setSquareReady(false)
+        setSquareError(null)
+      })
       void (async () => {
         const c = cardRef.current
         cardRef.current = null
