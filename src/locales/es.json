@@ -24,7 +24,34 @@
     "tiktok": "TikTok",
     "badgeOpen": "Lun–Sáb · 10am–6pm · Dom cerrado",
     "badgeWalkins": "Citas y walk-in",
-    "badgeReviews": "100% recomendado (8 reseñas)"
+    "badgeReviews": "100% recomendado (9 reseñas)"
+  },
+  "testimonials": {
+    "ariaLabel": "Reseñas de clientes",
+    "title": "Nuestras clientas lo dicen",
+    "subtitle": "100% te recomienda el salón — 9 reseñas públicas",
+    "reviews": {
+      "r1": {
+        "name": "Magaly Aydeé Silva",
+        "text": "Encantada con Eunice. Excelente trabajo ✅ 10 de 10. Recomendada Ada 💯"
+      },
+      "r2": {
+        "name": "Garcia Viv",
+        "text": "Fui sin cita y no sabía qué pedir; me dejó hermosa con el corte. Detalle increíble y todo a lo que necesitas. Volví a teñir viola-burgundy y quedó perfecto, con un color personalizado. Me sentí bienvenida y cómoda. Altamente recomendada ✨"
+      },
+      "r3": {
+        "name": "Yanet Teyes",
+        "text": "Me encantó el trabajo — súper recomendado."
+      },
+      "r4": {
+        "name": "María Hernández",
+        "text": "Excelente trabajo; se la recomiendo al 100%."
+      },
+      "r5": {
+        "name": "Janie Salinas",
+        "text": "Me quedé encantada con mi corte y todo el peinado. ¡Wow! Recomendada."
+      }
+    }
   },
   "services": {
     "title": "🌟 NUESTROS SERVICIOS 🌟",

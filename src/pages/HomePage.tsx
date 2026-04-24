@@ -3,6 +3,7 @@ import { ContactSection } from '../sections/ContactSection'
 import { HeroSection } from '../sections/HeroSection'
 import { MapSection } from '../sections/MapSection'
 import { ServicesSection } from '../sections/ServicesSection'
+import { TestimonialsSection } from '../sections/TestimonialsSection'
 import { SiteFooter } from '../sections/SiteFooter'
 
 export function HomePage() {
@@ -12,6 +13,7 @@ export function HomePage() {
       <main className="relative">
         <HeroSection />
         <ServicesSection />
+        <TestimonialsSection />
         <MapSection />
         <ContactSection />
       </main>

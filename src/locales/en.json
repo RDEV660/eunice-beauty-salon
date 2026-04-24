@@ -24,7 +24,34 @@
     "tiktok": "TikTok",
     "badgeOpen": "Mon–Sat · 10am–6pm · Sun closed",
     "badgeWalkins": "Appointments & walk-ins",
-    "badgeReviews": "100% recommend (8 reviews)"
+    "badgeReviews": "100% recommend (9 reviews)"
+  },
+  "testimonials": {
+    "ariaLabel": "Client reviews",
+    "title": "What our clients say",
+    "subtitle": "100% recommend the salon — 9 public reviews",
+    "reviews": {
+      "r1": {
+        "name": "Magaly Aydeé Silva",
+        "text": "I’m delighted with Eunice. Excellent work ✅ 10/10. Recommend Ada 100% 💯"
+      },
+      "r2": {
+        "name": "Garcia Viv",
+        "text": "I came in randomly for a cut with no real plan—she made me love my new hair. Amazing attention to detail, everything tailored to you. I also came back for a violet-burgundy color and she nailed it with a custom mix. I felt welcomed and comfortable. Highly recommend ✨"
+      },
+      "r3": {
+        "name": "Yanet Teyes",
+        "text": "I loved the work—super recommended."
+      },
+      "r4": {
+        "name": "María Hernández",
+        "text": "She does great work; excellent—I recommend her 100%."
+      },
+      "r5": {
+        "name": "Janie Salinas",
+        "text": "I was thrilled with my cut and the whole style. Wow—highly recommend!"
+      }
+    }
   },
   "services": {
     "title": "🌟 Our services 🌟",

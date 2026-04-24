@@ -185,9 +185,12 @@ export function HeroSection() {
             <span className="inline-flex items-center justify-center rounded-full border border-gold-400/30 bg-black/30 px-4 py-2.5 text-center font-condensed text-[0.6rem] font-semibold leading-snug text-white/95 sm:px-5 sm:text-xs">
               {t('hero.badgeWalkins')}
             </span>
-            <span className="inline-flex items-center justify-center rounded-full border border-white/15 bg-white/[0.12] px-4 py-2.5 font-condensed text-[0.65rem] font-semibold tracking-wider text-white sm:px-5 sm:text-xs">
+            <a
+              href="#reviews"
+              className="inline-flex items-center justify-center rounded-full border border-white/15 bg-white/[0.12] px-4 py-2.5 font-condensed text-[0.65rem] font-semibold tracking-wider text-white transition-colors hover:border-gold-400/40 hover:text-gold-100 sm:px-5 sm:text-xs"
+            >
               {t('hero.badgeReviews')}
-            </span>
+            </a>
           </motion.div>
         </div>
       </motion.div>
