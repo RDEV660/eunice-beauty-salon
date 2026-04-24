@@ -105,6 +105,11 @@ export function BookingSection() {
       try {
         const r = await fetch(apiUrl('/api/slots?days=14'))
         if (!r.ok) {
+          console.error(
+            '[Eunice booking] /api/slots HTTP',
+            r.status,
+            '— site owner: set VITE_API_BASE in Vercel to your API URL (no trailing slash), then redeploy.',
+          )
           if (!cancelled) {
             setSlotsLoadFailed(true)
             setSlots([])
@@ -116,7 +121,11 @@ export function BookingSection() {
             setSlots(data.slots ?? [])
           }
         }
-      } catch {
+      } catch (e) {
+        console.error(
+          '[Eunice booking] /api/slots unreachable — site owner: set VITE_API_BASE in Vercel to your API URL, then redeploy.',
+          e,
+        )
         if (!cancelled) {
           setSlotsLoadFailed(true)
           setSlots([])

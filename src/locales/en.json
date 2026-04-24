@@ -59,7 +59,7 @@
     "pay": "Pay deposit & book",
     "loadingSlots": "Loading available times…",
     "noSlots": "No open times showed in the online calendar for the next two weeks — enter your preferred time below to pay the deposit, or call us.",
-    "slotsApiError": "We couldn’t load the calendar because the booking API didn’t respond. The live site must set VITE_API_BASE to your API URL (then redeploy). Until then, call us to book.",
+    "slotsApiError": "The online calendar isn’t available right now. Please call us to book, or try again later.",
     "preferredTimePlaceholder": "e.g. Saturday, Feb 8 — afternoon",
     "preferredTimeHelp": "We’ll confirm your visit by phone or message. Your deposit still holds your spot.",
     "preferredTimeNote": "Preferred time: {{time}}",

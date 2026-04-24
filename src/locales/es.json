@@ -59,7 +59,7 @@
     "pay": "Pagar depósito y reservar",
     "loadingSlots": "Cargando horarios…",
     "noSlots": "No aparecen horarios libres en el calendario en línea (próximas dos semanas) — escribe abajo tu horario preferido para pagar la señal, o llámanos.",
-    "slotsApiError": "No pudimos cargar el calendario: el API de reservas no respondió. En producción configura VITE_API_BASE con la URL del API y vuelve a desplegar. Mientras, llámanos para reservar.",
+    "slotsApiError": "Por ahora no podemos mostrar el calendario en línea. Llámanos para reservar o vuelve a intentar más tarde.",
     "preferredTimePlaceholder": "p. ej. sábado 8 feb, por la tarde",
     "preferredTimeHelp": "Confirmaremos tu cita por teléfono o mensaje. La señal sigue aplicando a tu visita.",
     "preferredTimeNote": "Horario preferido: {{time}}",
