@@ -1,9 +1,12 @@
-import { getDb, listBlockedDays, listBookedSlotStarts } from './db.js'
+import { getDb, listBookedSlotStarts } from './db.js'
+import { listAllBlockedYmds } from './blockedStore.js'
 import { slotIsoToBusinessYmd } from './businessTime.js'
 import { generateCandidateSlots } from './slots.js'
 
 /** Shared by Express and Vercel `api/slots` (lean bundle, no Express). */
-export function getAvailableSlotStarts(daysParam: string | string[] | undefined): string[] {
+export async function getAvailableSlotStarts(
+  daysParam: string | string[] | undefined,
+): Promise<string[]> {
   getDb()
   const days = Math.min(21, Math.max(1, Number(Array.isArray(daysParam) ? daysParam[0] : daysParam) || 14))
   const candidates = generateCandidateSlots(days)
@@ -18,12 +21,7 @@ export function getAvailableSlotStarts(daysParam: string | string[] | undefined)
     booked = []
   }
   const bookedSet = new Set(booked)
-  let blocked: Set<string> = new Set()
-  try {
-    blocked = new Set(listBlockedDays())
-  } catch {
-    blocked = new Set()
-  }
+  const blocked = new Set(await listAllBlockedYmds())
   return candidates.filter(
     (s) => !bookedSet.has(s) && !blocked.has(slotIsoToBusinessYmd(s)),
   )

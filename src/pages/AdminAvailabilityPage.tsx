@@ -164,6 +164,7 @@ export function AdminAvailabilityPage() {
         {t('admin.title')}
       </h1>
       <p className="mt-2 text-sm text-white/70">{t('admin.subtitle')}</p>
+      <p className="mt-3 text-xs leading-relaxed text-amber-200/80">{t('admin.vercelStorageHint')}</p>
 
       {!authed ? (
         <form onSubmit={login} className="mt-8 space-y-4">

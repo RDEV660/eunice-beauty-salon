@@ -1,4 +1,4 @@
-import { listBlockedDays } from './db.js'
+import { listAllBlockedYmds } from './blockedStore.js'
 import { slotIsoToBusinessYmd } from './businessTime.js'
 
 /** Must match `src/lib/slotTbd.ts` — flexible booking when there are no listed slots. */
@@ -8,7 +8,7 @@ export function isFlexSlotPlaceholder(slotStart: string): boolean {
   return slotStart.trim() === FLEX_PLACEHOLDER_SLOT
 }
 
-export function isSlotYmdBlocked(slotStartIso: string): boolean {
-  const blocked = new Set(listBlockedDays())
+export async function isSlotYmdBlocked(slotStartIso: string): Promise<boolean> {
+  const blocked = new Set(await listAllBlockedYmds())
   return blocked.has(slotIsoToBusinessYmd(slotStartIso))
 }

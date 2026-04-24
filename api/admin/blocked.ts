@@ -20,7 +20,7 @@ export default async function handler(req: IncomingMessage, res: ServerResponse)
     return
   }
   if (req.method === 'GET') {
-    const r = getBlockedList(req)
+    const r = await getBlockedList(req)
     res.setHeader('Content-Type', 'application/json')
     res.statusCode = r.status
     res.end(JSON.stringify(r.body))
@@ -37,7 +37,7 @@ export default async function handler(req: IncomingMessage, res: ServerResponse)
       res.end(JSON.stringify({ error: 'invalid_json' }))
       return
     }
-    const r = postBlocked(req, body)
+    const r = await postBlocked(req, body)
     res.setHeader('Content-Type', 'application/json')
     res.statusCode = r.status
     res.end(JSON.stringify(r.body))
@@ -46,7 +46,7 @@ export default async function handler(req: IncomingMessage, res: ServerResponse)
   if (req.method === 'DELETE') {
     const u = new URL(req.url ?? '/', 'http://localhost')
     const date = u.searchParams.get('date')
-    const r = deleteBlocked(req, date)
+    const r = await deleteBlocked(req, date)
     res.setHeader('Content-Type', 'application/json')
     res.statusCode = r.status
     res.end(JSON.stringify(r.body))

@@ -40,9 +40,9 @@ export function createApp() {
     res.json({ ok: true })
   })
 
-  app.get('/api/slots', (req, res) => {
+  app.get('/api/slots', async (req, res) => {
     try {
-      const slots = getAvailableSlotStarts(req.query.days as string | string[] | undefined)
+      const slots = await getAvailableSlotStarts(req.query.days as string | string[] | undefined)
       res.json({ slots })
     } catch (e) {
       console.error(e)
@@ -58,21 +58,21 @@ export function createApp() {
     res.json({ ok: true, paymentId: result.paymentId, customerId: result.customerId })
   })
 
-  app.get('/api/admin/blocked', (req, res) => {
-    const r = getBlockedList(req)
+  app.get('/api/admin/blocked', async (req, res) => {
+    const r = await getBlockedList(req)
     res.status(r.status).json(r.body)
   })
 
-  app.post('/api/admin/blocked', (req, res) => {
-    const r = postBlocked(req, req.body)
+  app.post('/api/admin/blocked', async (req, res) => {
+    const r = await postBlocked(req, req.body)
     res.status(r.status).json(r.body)
   })
 
-  app.delete('/api/admin/blocked', (req, res) => {
+  app.delete('/api/admin/blocked', async (req, res) => {
     const q = req.query.date
     const first = Array.isArray(q) ? q[0] : q
     const date = typeof first === 'string' ? first : null
-    const r = deleteBlocked(req, date)
+    const r = await deleteBlocked(req, date)
     res.status(r.status).json(r.body)
   })
 

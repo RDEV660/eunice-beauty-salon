@@ -4,7 +4,7 @@ import { applyCors, sendOptions } from '../server/vercelCors.js'
 
 export const config = { maxDuration: 30 }
 
-export default function handler(req: IncomingMessage, res: ServerResponse) {
+export default async function handler(req: IncomingMessage, res: ServerResponse) {
   applyCors(req, res)
   if (req.method === 'OPTIONS') {
     sendOptions(req, res)
@@ -18,7 +18,7 @@ export default function handler(req: IncomingMessage, res: ServerResponse) {
   try {
     const u = new URL(req.url ?? '/', 'http://localhost')
     const days = u.searchParams.get('days') ?? '14'
-    const slots = getAvailableSlotStarts(days)
+    const slots = await getAvailableSlotStarts(days)
     res.setHeader('Content-Type', 'application/json')
     res.statusCode = 200
     res.end(JSON.stringify({ slots }))

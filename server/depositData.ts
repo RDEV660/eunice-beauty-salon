@@ -89,7 +89,7 @@ export async function runDepositPayment(body: DepositBody): Promise<DepositSucce
     return { ok: false, status: 500, body: { error: 'server_misconfigured' } }
   }
 
-  if (!isFlexSlotPlaceholder(body.slotStart) && isSlotYmdBlocked(body.slotStart)) {
+  if (!isFlexSlotPlaceholder(body.slotStart) && (await isSlotYmdBlocked(body.slotStart))) {
     return { ok: false, status: 409, body: { error: 'slot_blocked' } }
   }
 

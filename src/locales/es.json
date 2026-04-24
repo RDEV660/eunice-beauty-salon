@@ -173,6 +173,7 @@
     "blockedList": "Días bloqueados",
     "noBlocked": "No hay días completos bloqueados; los clientes ven el horario normal.",
     "unblock": "Quitar bloqueo",
-    "invalidDate": "Revisa la fecha e inténtalo otra vez."
+    "invalidDate": "Revisa la fecha e inténtalo otra vez.",
+    "vercelStorageHint": "En Vercel: Vercel → tu proyecto → Storage → Blob, crea un almacén y añade BLOB_READ_WRITE_TOKEN al proyecto, luego redepliega. La lista se guarda en un archivo en ese almacén para que reservas y admin coincidan. En local: no la configures; se usa el SQLite en data/."
   }
 }
