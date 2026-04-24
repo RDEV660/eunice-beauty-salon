@@ -4,7 +4,7 @@ import { createApp } from '../server/app.js'
 const app = createApp()
 
 export const config = {
-  maxDuration: 30,
+  maxDuration: 60,
 }
 
 export default serverless(app, {

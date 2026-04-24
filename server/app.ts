@@ -3,23 +3,26 @@ import cors from 'cors'
 import express from 'express'
 import rateLimit from 'express-rate-limit'
 import { randomUUID } from 'node:crypto'
-import { SquareClient, SquareEnvironment } from 'square'
+import type { SquareClient } from 'square'
 import { getDb, insertAppointment, listBookedSlotStarts } from './db.js'
 import { ensureSquareCustomer } from './squareCustomer.js'
 import { generateCandidateSlots } from './slots.js'
 
 const DEPOSIT_CENTS = 2500
 
-function squareClient() {
+/** Dynamic import keeps `square` off the cold path (e.g. /api/health) and speeds Vercel cold starts. */
+let squareMod: typeof import('square') | null = null
+async function getSquareClient(): Promise<SquareClient> {
+  if (!squareMod) squareMod = await import('square')
   const token = process.env.SQUARE_ACCESS_TOKEN
   if (!token) {
     throw new Error('SQUARE_ACCESS_TOKEN is not set')
   }
   const environment =
     process.env.SQUARE_ENVIRONMENT === 'production'
-      ? SquareEnvironment.Production
-      : SquareEnvironment.Sandbox
-  return new SquareClient({ token, environment })
+      ? squareMod.SquareEnvironment.Production
+      : squareMod.SquareEnvironment.Sandbox
+  return new squareMod.SquareClient({ token, environment })
 }
 
 export function createApp() {
@@ -113,7 +116,7 @@ export function createApp() {
     let paymentId: string
     let squareCustomerId: string | undefined
     try {
-      const client = squareClient()
+      const client = await getSquareClient()
       try {
         squareCustomerId = await ensureSquareCustomer(client, {
           name: body.name.trim(),

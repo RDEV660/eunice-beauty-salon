@@ -1,7 +1,9 @@
-import Database from 'better-sqlite3'
+import { createRequire } from 'node:module'
 import fs from 'node:fs'
 import path from 'node:path'
 import { fileURLToPath } from 'node:url'
+
+const require = createRequire(import.meta.url)
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url))
 
@@ -14,10 +16,14 @@ function defaultDbPath(): string {
 
 const dbPath = defaultDbPath()
 
-let db: Database.Database | null = null
+// Lazy-load better-sqlite3 so cold starts (e.g. /api/health) do not pay native module + disk cost.
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+let db: any = null
 
-export function getDb(): Database.Database {
+export function getDb() {
   if (!db) {
+    // eslint-disable-next-line @typescript-eslint/no-require-imports
+    const Database = require('better-sqlite3')
     fs.mkdirSync(path.dirname(dbPath), { recursive: true })
     const instance = new Database(dbPath)
     instance.exec(`
