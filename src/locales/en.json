@@ -148,7 +148,8 @@
   },
   "footer": {
     "category": "Beauty, cosmetic & personal care",
-    "rights": "© {{year}} Eunice Beauty Salon"
+    "rights": "© {{year}} Eunice Beauty Salon",
+    "staffLogin": "Staff login"
   },
   "address": "1114 W Veterans Blvd, Palmview South, TX, United States",
   "admin": {

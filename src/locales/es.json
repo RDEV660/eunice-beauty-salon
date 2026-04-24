@@ -148,7 +148,8 @@
   },
   "footer": {
     "category": "Belleza, cosméticos y cuidado personal",
-    "rights": "© {{year}} Eunice Beauty Salon"
+    "rights": "© {{year}} Eunice Beauty Salon",
+    "staffLogin": "Acceso del personal"
   },
   "address": "1114 W Veterans Blvd, Palmview Sur, TX, Estados Unidos",
   "admin": {
