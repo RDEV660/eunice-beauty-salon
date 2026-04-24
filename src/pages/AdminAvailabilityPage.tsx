@@ -113,6 +113,10 @@ export function AdminAvailabilityPage() {
         setError(t('admin.invalidDate'))
         return
       }
+      if (r.status === 503 && data.error === 'block_persist_failed') {
+        setError(t('admin.saveErrorConfig'))
+        return
+      }
       if (!r.ok) {
         setError(t('admin.saveError'))
         return
@@ -135,10 +139,14 @@ export function AdminAvailabilityPage() {
         method: 'DELETE',
         headers: authHeaders(token),
       })
-      const data = (await r.json()) as { dates?: string[] }
+      const data = (await r.json()) as { dates?: string[]; error?: string }
       if (r.status === 401) {
         logout()
         setError(t('admin.wrongPassword'))
+        return
+      }
+      if (r.status === 503 && data.error === 'block_persist_failed') {
+        setError(t('admin.saveErrorConfig'))
         return
       }
       if (!r.ok) {

@@ -166,6 +166,7 @@
     "notConfigured": "Esta página aún no está configurada. Se debe agregar ADMIN_PASSWORD al entorno de la API.",
     "loadError": "No se pudo cargar la lista. Revisa la conexión y la API de reservas (VITE_API_BASE / CORS).",
     "saveError": "No se pudieron guardar los cambios. Reintenta o revisa el servidor.",
+    "saveErrorConfig": "No se pudo guardar. En Vercel, añade Storage → Blob, configura BLOB_READ_WRITE_TOKEN, redepliega, o usa BLOCKED_DAYS. En local, la API debe poder crear data/appointments.sqlite.",
     "signOut": "Salir (solo en este navegador)",
     "blockNew": "Bloquear un día",
     "blockNewHelp": "Elige una fecha: se ocultan en línea todos los turnos de ese día en la zona horaria del salón.",

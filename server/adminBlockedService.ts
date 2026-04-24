@@ -26,7 +26,12 @@ export async function getBlockedList(req: { headers: IncomingMessage['headers'] 
   if (!isAdminPasswordConfigured()) return adminNotConfiguredBody()
   if (!isAdminToken(getAdminBearerFromRequest({ headers: req.headers })))
     return unauthorizedBody()
-  return { status: 200, body: { dates: (await listAllBlockedYmds()) as Json } }
+  try {
+    return { status: 200, body: { dates: (await listAllBlockedYmds()) as Json } }
+  } catch (e) {
+    console.error('[eunice] getBlockedList', e)
+    return { status: 503, body: { error: 'block_list_failed' } as Json }
+  }
 }
 
 export async function postBlocked(
@@ -43,8 +48,13 @@ export async function postBlocked(
   if (typeof date !== 'string' || !isValidYmd(date)) {
     return { status: 400, body: { error: 'invalid_date' } }
   }
-  await addBlockedYmd(date)
-  return { status: 200, body: { ok: true, dates: (await listAllBlockedYmds()) as Json } }
+  try {
+    await addBlockedYmd(date)
+    return { status: 200, body: { ok: true, dates: (await listAllBlockedYmds()) as Json } }
+  } catch (e) {
+    console.error('[eunice] postBlocked', e)
+    return { status: 503, body: { error: 'block_persist_failed' } as Json }
+  }
 }
 
 export async function deleteBlocked(
@@ -57,6 +67,11 @@ export async function deleteBlocked(
   if (!date || !isValidYmd(date)) {
     return { status: 400, body: { error: 'invalid_date' } }
   }
-  const removed = await removeBlockedYmd(date)
-  return { status: 200, body: { ok: true, removed, dates: (await listAllBlockedYmds()) as Json } }
+  try {
+    const removed = await removeBlockedYmd(date)
+    return { status: 200, body: { ok: true, removed, dates: (await listAllBlockedYmds()) as Json } }
+  } catch (e) {
+    console.error('[eunice] deleteBlocked', e)
+    return { status: 503, body: { error: 'block_persist_failed' } as Json }
+  }
 }
