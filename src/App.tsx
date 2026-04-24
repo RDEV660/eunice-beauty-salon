@@ -1,4 +1,4 @@
-import { Route, Routes } from 'react-router-dom'
+import { Navigate, Route, Routes } from 'react-router-dom'
 import { DocumentMeta } from './components/DocumentMeta'
 import { Header } from './components/Header'
 import { BookPage } from './pages/BookPage'
@@ -16,6 +16,12 @@ function App() {
           <Route path="/" element={<HomePage />} />
           <Route path="/book" element={<BookPage />} />
           <Route path="/book/success" element={<BookSuccessPage />} />
+          {/*
+            /api is for fetch() to a backend, not a client route. A mistaken visit
+            to /api still loads the SPA; send users home instead of "no routes matched".
+          */}
+          <Route path="/api" element={<Navigate to="/" replace />} />
+          <Route path="/api/*" element={<Navigate to="/" replace />} />
         </Routes>
       </div>
     </div>
