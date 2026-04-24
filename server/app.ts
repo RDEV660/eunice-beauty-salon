@@ -2,6 +2,7 @@ import 'dotenv/config'
 import cors from 'cors'
 import express from 'express'
 import rateLimit from 'express-rate-limit'
+import { deleteBlocked, getBlockedList, postBlocked } from './adminBlockedService.js'
 import { type DepositBody, runDepositPayment } from './depositData.js'
 import { getAvailableSlotStarts } from './slotsData.js'
 
@@ -18,6 +19,8 @@ export function createApp() {
     cors({
       origin: corsOrigin,
       credentials: true,
+      allowedHeaders: ['Content-Type', 'Authorization'],
+      methods: ['GET', 'POST', 'DELETE', 'OPTIONS'],
     }),
   )
   app.use(express.json({ limit: '64kb' }))
@@ -53,6 +56,24 @@ export function createApp() {
       return res.status(result.status).json(result.body)
     }
     res.json({ ok: true, paymentId: result.paymentId, customerId: result.customerId })
+  })
+
+  app.get('/api/admin/blocked', (req, res) => {
+    const r = getBlockedList(req)
+    res.status(r.status).json(r.body)
+  })
+
+  app.post('/api/admin/blocked', (req, res) => {
+    const r = postBlocked(req, req.body)
+    res.status(r.status).json(r.body)
+  })
+
+  app.delete('/api/admin/blocked', (req, res) => {
+    const q = req.query.date
+    const first = Array.isArray(q) ? q[0] : q
+    const date = typeof first === 'string' ? first : null
+    const r = deleteBlocked(req, date)
+    res.status(r.status).json(r.body)
   })
 
   return app

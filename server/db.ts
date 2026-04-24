@@ -46,6 +46,11 @@ export function getDb() {
     } catch {
       /* column exists */
     }
+    instance.exec(`
+      CREATE TABLE IF NOT EXISTS blocked_days (
+        ymd TEXT PRIMARY KEY NOT NULL
+      );
+    `)
     db = instance
   }
   return db
@@ -88,4 +93,24 @@ export function listBookedSlotStarts(fromIso: string, toIso: string): string[] {
     )
     .all({ from: fromIso, to: toIso }) as { slot_start: string }[]
   return rows.map((r) => r.slot_start)
+}
+
+export function listBlockedDays(): string[] {
+  const rows = getDb()
+    .prepare(`SELECT ymd FROM blocked_days ORDER BY ymd`)
+    .all() as { ymd: string }[]
+  return rows.map((r) => r.ymd)
+}
+
+export function addBlockedDay(ymd: string): void {
+  getDb()
+    .prepare(`INSERT OR IGNORE INTO blocked_days (ymd) VALUES (?)`)
+    .run(ymd)
+}
+
+export function removeBlockedDay(ymd: string): number {
+  const info = getDb()
+    .prepare(`DELETE FROM blocked_days WHERE ymd = ?`)
+    .run(ymd)
+  return Number(info.changes)
 }

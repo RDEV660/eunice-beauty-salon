@@ -6,7 +6,8 @@
   "functions": {
     "api/health.ts": { "maxDuration": 10 },
     "api/slots.ts": { "maxDuration": 30 },
-    "api/payments/deposit.ts": { "maxDuration": 60 }
+    "api/payments/deposit.ts": { "maxDuration": 60 },
+    "api/admin/blocked.ts": { "maxDuration": 10 }
   },
   "rewrites": [{ "source": "/(.*)", "destination": "/index.html" }]
 }

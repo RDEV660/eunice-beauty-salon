@@ -150,5 +150,27 @@
     "category": "Belleza, cosméticos y cuidado personal",
     "rights": "© {{year}} Eunice Beauty Salon"
   },
-  "address": "1114 W Veterans Blvd, Palmview Sur, TX, Estados Unidos"
+  "address": "1114 W Veterans Blvd, Palmview Sur, TX, Estados Unidos",
+  "admin": {
+    "metaTitle": "Calendario | Eunice Beauty Salon",
+    "metaDescription": "Ajustes del calendario (personal).",
+    "title": "Bloquear días en línea",
+    "subtitle": "Los días que bloquees no aparecerán como disponibles en el formulario público. Usa la contraseña que configuró el sitio en el servidor.",
+    "backHome": "← Inicio",
+    "passwordLabel": "Contraseña",
+    "continue": "Continuar",
+    "working": "…",
+    "wrongPassword": "La contraseña no es correcta.",
+    "notConfigured": "Esta página aún no está configurada. Se debe agregar ADMIN_PASSWORD al entorno de la API.",
+    "loadError": "No se pudo cargar la lista. Revisa la conexión y la API de reservas (VITE_API_BASE / CORS).",
+    "saveError": "No se pudieron guardar los cambios. Reintenta o revisa el servidor.",
+    "signOut": "Salir (solo en este navegador)",
+    "blockNew": "Bloquear un día",
+    "blockNewHelp": "Elige una fecha: se ocultan en línea todos los turnos de ese día en la zona horaria del salón.",
+    "addDay": "Bloquear día",
+    "blockedList": "Días bloqueados",
+    "noBlocked": "No hay días completos bloqueados; los clientes ven el horario normal.",
+    "unblock": "Quitar bloqueo",
+    "invalidDate": "Revisa la fecha e inténtalo otra vez."
+  }
 }

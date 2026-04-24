@@ -150,5 +150,27 @@
     "category": "Beauty, cosmetic & personal care",
     "rights": "© {{year}} Eunice Beauty Salon"
   },
-  "address": "1114 W Veterans Blvd, Palmview South, TX, United States"
+  "address": "1114 W Veterans Blvd, Palmview South, TX, United States",
+  "admin": {
+    "metaTitle": "Calendar | Eunice Beauty Salon",
+    "metaDescription": "Staff calendar settings.",
+    "title": "Block dates online",
+    "subtitle": "Days you block here will not show as available in the public booking form. Use the password the site owner set on the server.",
+    "backHome": "← Home",
+    "passwordLabel": "Password",
+    "continue": "Continue",
+    "working": "…",
+    "wrongPassword": "That password is not correct.",
+    "notConfigured": "This page is not set up on the server yet. Add ADMIN_PASSWORD to the API environment.",
+    "loadError": "Could not load the list. Check your connection and that the booking API (VITE_API_BASE / CORS) is correct.",
+    "saveError": "Could not save changes. Try again or check the server.",
+    "signOut": "Sign out (this browser only)",
+    "blockNew": "Block a day",
+    "blockNewHelp": "Choose a date — all appointment slots that fall on that day in the salon’s time zone are hidden from online booking.",
+    "addDay": "Block day",
+    "blockedList": "Currently blocked",
+    "noBlocked": "No full days are blocked. Customers see the normal weekly hours.",
+    "unblock": "Unblock",
+    "invalidDate": "Check the date and try again."
+  }
 }

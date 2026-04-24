@@ -1,6 +1,7 @@
 import { Navigate, Route, Routes } from 'react-router-dom'
 import { DocumentMeta } from './components/DocumentMeta'
 import { Header } from './components/Header'
+import { AdminAvailabilityPage } from './pages/AdminAvailabilityPage'
 import { BookPage } from './pages/BookPage'
 import { BookSuccessPage } from './pages/BookSuccessPage'
 import { HomePage } from './pages/HomePage'
@@ -16,6 +17,7 @@ function App() {
           <Route path="/" element={<HomePage />} />
           <Route path="/book" element={<BookPage />} />
           <Route path="/book/success" element={<BookSuccessPage />} />
+          <Route path="/admin/availability" element={<AdminAvailabilityPage />} />
           {/*
             /api is for fetch() to a backend, not a client route. A mistaken visit
             to /api still loads the SPA; send users home instead of "no routes matched".

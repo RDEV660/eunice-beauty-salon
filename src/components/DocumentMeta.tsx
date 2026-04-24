@@ -15,6 +15,9 @@ export function DocumentMeta() {
     } else if (pathname.startsWith('/book')) {
       title = t('booking.metaTitle')
       description = t('booking.metaDescription')
+    } else if (pathname.startsWith('/admin')) {
+      title = t('admin.metaTitle')
+      description = t('admin.metaDescription')
     }
     document.title = title
     const el = document.querySelector('meta[name="description"]')
