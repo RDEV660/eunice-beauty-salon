@@ -55,8 +55,8 @@ export function HeroSection() {
         <video
           ref={heroVideoRef}
           src={heroLogoVideo}
-          className="absolute inset-0 z-0 h-full w-full object-cover"
-          style={{ minHeight: '100%', minWidth: '100%' }}
+          className="absolute inset-0 z-0 h-full w-full min-h-full min-w-full object-cover object-center will-change-transform [transform:translateZ(0)] [backface-visibility:hidden]"
+          style={{ objectPosition: 'center center' }}
           autoPlay
           loop
           muted
@@ -65,13 +65,13 @@ export function HeroSection() {
           aria-hidden
         />
 
-        {/* Light scrim — keep video visible; text relies on soft shadows too */}
+        {/* Slightly dark scrim + readable text; not as heavy as first dark pass */}
         <div
-          className="absolute inset-0 z-[1] bg-gradient-to-b from-black/35 via-black/15 to-black/40"
+          className="absolute inset-0 z-[1] bg-gradient-to-b from-black/50 via-black/25 to-black/50"
           aria-hidden
         />
         <div
-          className="absolute inset-0 z-[1] bg-gradient-to-t from-black/55 via-black/5 to-black/20"
+          className="absolute inset-0 z-[1] bg-gradient-to-t from-black/60 via-black/8 to-black/30"
           aria-hidden
         />
 
@@ -131,7 +131,7 @@ export function HeroSection() {
                 href={WHATSAPP_HREF}
                 target="_blank"
                 rel="noopener noreferrer"
-                className={`${btnBase} border border-gold-400/45 bg-black/40 text-gold-50 shadow-[0_4px_20px_rgba(0,0,0,0.35)] backdrop-blur-sm transition-colors hover:border-gold-400/70 hover:bg-black/50`}
+                className={`${btnBase} border border-gold-400/45 bg-black/45 text-gold-50 shadow-[0_4px_20px_rgba(0,0,0,0.4)] transition-colors hover:border-gold-400/70 hover:bg-black/55`}
               >
                 <WhatsAppIcon className="h-5 w-5 shrink-0 text-[#3fe06d]" />
                 {t('hero.whatsapp')}
@@ -144,7 +144,7 @@ export function HeroSection() {
             >
               <Link
                 to="/book"
-                className={`${btnBase} border border-gold-400/55 bg-amber-400/18 text-gold-50 shadow-[0_4px_20px_rgba(0,0,0,0.3)] backdrop-blur-sm transition-colors hover:border-gold-300 hover:bg-amber-400/28`}
+                className={`${btnBase} border border-gold-400/55 bg-amber-500/15 text-gold-50 shadow-[0_4px_20px_rgba(0,0,0,0.35)] transition-colors hover:border-gold-300 hover:bg-amber-500/25`}
               >
                 {t('cta.button')}
               </Link>
