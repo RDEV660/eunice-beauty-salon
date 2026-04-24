@@ -4,6 +4,57 @@ import { getSquareClient } from './squareClientFactory.js'
 import { ensureSquareCustomer } from './squareCustomer.js'
 
 const DEPOSIT_CENTS = 2500
+/** Shown in Square transaction note + stored appointment note for the owner (Texas default). */
+const DEFAULT_BUSINESS_TZ = 'America/Chicago'
+const MAX_SQUARE_PAYMENT_NOTE_LEN = 500
+
+function formatWhenForOwner(slotStartIso: string): string {
+  const tz = process.env.BUSINESS_TIMEZONE?.trim() || DEFAULT_BUSINESS_TZ
+  try {
+    return new Date(slotStartIso).toLocaleString('en-US', {
+      timeZone: tz,
+      weekday: 'short',
+      month: 'short',
+      day: 'numeric',
+      year: 'numeric',
+      hour: 'numeric',
+      minute: '2-digit',
+    })
+  } catch {
+    return slotStartIso
+  }
+}
+
+/** Full text the salon owner sees on the payment in the Square Dashboard. */
+function buildSquarePaymentNote(body: DepositBody): string {
+  const when = formatWhenForOwner(body.slotStart)
+  const lines = [
+    `Eunice — deposit: ${body.service.trim()}`,
+    `Appt: ${when} (${process.env.BUSINESS_TIMEZONE?.trim() || DEFAULT_BUSINESS_TZ})`,
+    `Name: ${body.name.trim()}`,
+    `Email: ${body.email.trim()}`,
+    `Phone: ${body.phone.trim()}`,
+    'Deposit policy: accepted',
+  ]
+  if (body.note?.trim()) {
+    lines.push(`Client request: ${body.note.trim()}`)
+  }
+  let note = lines.join('\n')
+  if (note.length > MAX_SQUARE_PAYMENT_NOTE_LEN) {
+    note = `${note.slice(0, MAX_SQUARE_PAYMENT_NOTE_LEN - 1)}…`
+  }
+  return note
+}
+
+/** First lines in the local DB so exports still read clearly if Square is not open. */
+function buildStoredAppointmentNote(body: DepositBody): string {
+  const when = formatWhenForOwner(body.slotStart)
+  const head = `Service: ${body.name.trim()} · ${body.service.trim()}\nWhen: ${when}\n${body.email.trim()} · ${body.phone.trim()}`
+  if (body.note?.trim()) {
+    return `${head}\n\n${body.note.trim()}`
+  }
+  return head
+}
 
 export type DepositBody = {
   sourceId: string
@@ -63,7 +114,7 @@ export async function runDepositPayment(body: DepositBody): Promise<DepositSucce
       autocomplete: true,
       locationId,
       ...(squareCustomerId ? { customerId: squareCustomerId } : {}),
-      note: `Deposit — ${body.service} @ ${body.slotStart}`,
+      note: buildSquarePaymentNote(body),
       buyerEmailAddress: body.email.trim(),
     })
     const errors = resp.errors
@@ -90,7 +141,7 @@ export async function runDepositPayment(body: DepositBody): Promise<DepositSucce
       slotStart: body.slotStart.trim(),
       squarePaymentId: paymentId,
       squareCustomerId,
-      note: body.note?.trim(),
+      note: buildStoredAppointmentNote(body),
     })
   } catch (e) {
     console.error('DB after payment', e)

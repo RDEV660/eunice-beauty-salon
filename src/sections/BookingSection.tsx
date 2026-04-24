@@ -20,10 +20,42 @@ const SQUARE_CDN_PRODUCTION = 'https://web.squarecdn.com/v1/square.js'
 /** When the API returns no bookable times, we still take a deposit with a TBD machine-readable slot. */
 const SLOT_TBD = '2100-01-01T12:00:00.000Z'
 
+function splitName(full: string): { givenName: string; familyName: string } {
+  const t = full.trim()
+  if (!t) return { givenName: 'Guest', familyName: 'Customer' }
+  const parts = t.split(/\s+/)
+  if (parts.length === 1) return { givenName: parts[0]!, familyName: 'Customer' }
+  return { givenName: parts[0]!, familyName: parts.slice(1).join(' ') }
+}
+
+/** Square’s Web SDK often throws with `errorList` (not a plain Error message). */
+function extractTokenizeError(err: unknown): string {
+  if (err && typeof err === 'object') {
+    const list = (err as { errorList?: { message?: string }[] }).errorList
+    if (Array.isArray(list) && list.length > 0) {
+      return list
+        .map((e) => (typeof e?.message === 'string' ? e.message : ''))
+        .filter(Boolean)
+        .join(' ')
+    }
+  }
+  if (err instanceof Error) {
+    const m = err.message?.trim() ?? ''
+    if (m && !/^\s*at\s/i.test(m)) return m
+  }
+  return ''
+}
+
 /**
  * Sandbox Application IDs (e.g. `sandbox-sq0idb-...`) must use the sandbox CDN,
  * even if VITE_SQUARE_ENVIRONMENT is mistakenly set to `production` on the host.
  */
+/** True when the Web SDK points at Square Sandbox — real card numbers are rejected (HTTP 400 on card-nonce). */
+function isPaymentSandboxMode(appId: string): boolean {
+  if (!appId) return false
+  return /sandbox/i.test(appId) || !isSquareProductionEnv()
+}
+
 function squareScriptUrlForApplicationId(appId: string): string {
   if (/sandbox/i.test(appId)) {
     if (isSquareProductionEnv()) {
@@ -50,10 +82,25 @@ function loadSquareScript(src: string): Promise<void> {
   })
 }
 
+type CardTokenizeOptions = {
+  billingContact: {
+    givenName: string
+    familyName: string
+    email: string
+    phone: string
+    countryCode: string
+    postalCode: string
+  }
+}
+
+type CardConfigureOptions = { postalCode?: string; style?: Record<string, unknown> }
+
 type CardHandle = {
   attach: (selector: string) => Promise<void>
+  /** Sync iframe defaults (e.g. billing ZIP) when the Web Payments Card supports it. */
+  configure?: (options: CardConfigureOptions) => Promise<void>
   destroy: () => Promise<void>
-  tokenize: () => Promise<{
+  tokenize: (options?: CardTokenizeOptions) => Promise<{
     status: string
     token?: string
     errors?: { message: string }[]
@@ -77,6 +124,7 @@ export function BookingSection() {
   const appId = (import.meta.env.VITE_SQUARE_APPLICATION_ID ?? '').trim()
   const locationId = (import.meta.env.VITE_SQUARE_LOCATION_ID ?? '').trim()
   const missingSquareConfig = !appId || !locationId
+  const showSandboxNotice = !missingSquareConfig && isPaymentSandboxMode(appId)
 
   const cardRef = useRef<CardHandle | null>(null)
 
@@ -90,6 +138,7 @@ export function BookingSection() {
   const [name, setName] = useState('')
   const [email, setEmail] = useState('')
   const [phone, setPhone] = useState('')
+  const [billingPostal, setBillingPostal] = useState('')
   const [service, setService] = useState<string>(SERVICE_KEYS[0])
   const [slot, setSlot] = useState('')
   const [note, setNote] = useState('')
@@ -139,8 +188,29 @@ export function BookingSection() {
     }
   }, [])
 
+  useEffect(() => {
+    if (!squareReady) return
+    const c = cardRef.current
+    if (!c?.configure || !billingPostal.trim()) return
+    const zip = billingPostal.trim()
+    void c.configure({ postalCode: zip }).catch(() => {
+      // Older SDKs or if iframe has no postal field — tokenize() still sends billingContact.
+    })
+  }, [squareReady, billingPostal])
+
   useLayoutEffect(() => {
     if (missingSquareConfig) return
+
+    if (!terms) {
+      setSquareReady(false)
+      setSquareError(null)
+      void (async () => {
+        const c = cardRef.current
+        cardRef.current = null
+        if (c) await c.destroy()
+      })()
+      return
+    }
 
     let cancelled = false
     void Promise.resolve().then(() => {
@@ -228,7 +298,7 @@ export function BookingSection() {
         if (c) await c.destroy()
       })()
     }
-  }, [appId, locationId, cardContainerId, missingSquareConfig, t])
+  }, [appId, locationId, cardContainerId, missingSquareConfig, t, terms])
 
   function formatSlotLabel(iso: string): string {
     const d = new Date(iso)
@@ -253,7 +323,7 @@ export function BookingSection() {
       setMessage({ type: 'err', text: t('booking.errors.terms') })
       return
     }
-    if (!name.trim() || !email.trim() || !phone.trim()) {
+    if (!name.trim() || !email.trim() || !phone.trim() || !billingPostal.trim()) {
       setMessage({ type: 'err', text: t('booking.errors.fill') })
       return
     }
@@ -278,24 +348,97 @@ export function BookingSection() {
     }
 
     setSubmitting(true)
+    const { givenName, familyName } = splitName(name)
+    const tokenizeOptions: CardTokenizeOptions = {
+      billingContact: {
+        givenName,
+        familyName,
+        email: email.trim(),
+        phone: phone.trim(),
+        countryCode: 'US',
+        postalCode: billingPostal.trim(),
+      },
+    }
+    const card = cardRef.current
+    if (!card) {
+      setSubmitting(false)
+      return
+    }
+
+    const sandboxNoBilling = isPaymentSandboxMode(appId)
+    let tokenResult: {
+      status: string
+      token?: string
+      errors?: { message: string }[]
+    }
+    const showTokenizeFailure = (detail: string) => {
+      setMessage({
+        type: 'err',
+        text:
+          detail && detail.length > 0 && detail.length < 320
+            ? t('booking.errors.cardValidation', { detail })
+            : t('booking.errors.tokenizeClient'),
+      })
+    }
+
     try {
-      const tokenResult = await cardRef.current.tokenize()
-      if (tokenResult.status !== 'OK' || !tokenResult.token) {
-        setMessage({ type: 'err', text: t('booking.errors.payment') })
+      tokenResult = await card.tokenize(tokenizeOptions)
+    } catch (err) {
+      console.error('Square tokenize (with billing)', err)
+      if (sandboxNoBilling) {
+        try {
+          tokenResult = await card.tokenize()
+        } catch (err2) {
+          console.error('Square tokenize (sandbox, no extra args)', err2)
+          const a = extractTokenizeError(err) || t('booking.errors.tokenizeClient')
+          const b = extractTokenizeError(err2)
+          showTokenizeFailure([a, b].filter(Boolean).join(' — '))
+          setSubmitting(false)
+          return
+        }
+      } else {
+        const detail = extractTokenizeError(err)
+        showTokenizeFailure(detail || t('booking.errors.tokenizeClient'))
         setSubmitting(false)
         return
       }
+    }
 
-      const slotStart = slots.length > 0 ? slot : SLOT_TBD
-      const noteParts: string[] = []
-      if (slots.length === 0 && flexPreferred.trim()) {
-        noteParts.push(t('booking.preferredTimeNote', { time: flexPreferred.trim() }))
+    if (tokenResult.status !== 'OK' || !tokenResult.token) {
+      if (sandboxNoBilling) {
+        try {
+          const r2 = await card.tokenize()
+          if (r2.status === 'OK' && r2.token) {
+            tokenResult = r2
+          }
+        } catch (e3) {
+          console.error('Square tokenize retry (sandbox)', e3)
+        }
       }
-      if (note.trim()) noteParts.push(note.trim())
-      const noteCombined = noteParts.length > 0 ? noteParts.join('\n\n') : undefined
+    }
 
-      const idempotencyKey = crypto.randomUUID()
-      const res = await fetch(apiUrl('/api/payments/deposit'), {
+    if (tokenResult.status !== 'OK' || !tokenResult.token) {
+      const detail = tokenResult.errors
+        ?.map((e) => e.message)
+        .filter(Boolean)
+        .join(' ')
+      showTokenizeFailure(detail || t('booking.errors.tokenizeClient'))
+      setSubmitting(false)
+      return
+    }
+
+    const slotStart = slots.length > 0 ? slot : SLOT_TBD
+    const noteParts: string[] = []
+    if (slots.length === 0 && flexPreferred.trim()) {
+      noteParts.push(t('booking.preferredTimeNote', { time: flexPreferred.trim() }))
+    }
+    if (note.trim()) noteParts.push(note.trim())
+    const noteCombined = noteParts.length > 0 ? noteParts.join('\n\n') : undefined
+
+    const idempotencyKey = crypto.randomUUID()
+    let res: Response
+    try {
+      res = await fetch(apiUrl('/api/payments/deposit'), {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -310,34 +453,72 @@ export function BookingSection() {
           note: noteCombined,
         }),
       })
-
-      const body = (await res.json()) as {
-        ok?: boolean
-        paymentId?: string
-        customerId?: string | null
-      }
-
-      if (!res.ok || !body.ok || !body.paymentId) {
-        setMessage({ type: 'err', text: t('booking.errors.payment') })
-        setSubmitting(false)
-        return
-      }
-
-      await cardRef.current?.destroy()
-      cardRef.current = null
-
-      setSubmitting(false)
-      navigate('/book/success', {
-        replace: true,
-        state: {
-          paymentId: body.paymentId,
-          customerId: body.customerId ?? undefined,
-        },
-      })
-    } catch {
+    } catch (err) {
+      console.error('POST /api/payments/deposit', err)
       setMessage({ type: 'err', text: t('booking.errors.network') })
       setSubmitting(false)
+      return
     }
+
+    const raw = await res.text()
+    type ErrBody = { error?: string; ok?: boolean; paymentId?: string; customerId?: string | null }
+    let data: ErrBody
+    try {
+      data = raw ? (JSON.parse(raw) as ErrBody) : {}
+    } catch (err) {
+      console.error('Non-JSON payment response', res.status, raw.slice(0, 200), err)
+      setMessage({
+        type: 'err',
+        text: t('booking.errors.unexpectedResponse', { status: String(res.status) }),
+      })
+      setSubmitting(false)
+      return
+    }
+
+    if (!res.ok) {
+      const code = data.error
+      if (code) {
+        setMessage({
+          type: 'err',
+          text: t('booking.errors.paymentWithCode', { code }),
+        })
+      } else {
+        setMessage({ type: 'err', text: t('booking.errors.payment') })
+      }
+      setSubmitting(false)
+      return
+    }
+
+    if (!data.ok || !data.paymentId) {
+      setMessage({ type: 'err', text: t('booking.errors.payment') })
+      setSubmitting(false)
+      return
+    }
+
+    try {
+      await cardRef.current?.destroy()
+    } catch {
+      /* ignore */
+    }
+    cardRef.current = null
+
+    setSubmitting(false)
+    const whenLabel =
+      slots.length > 0
+        ? formatSlotLabel(slot)
+        : t('booking.flexibleWhenSuccess', { time: flexPreferred.trim() })
+    navigate('/book/success', {
+      replace: true,
+      state: {
+        paymentId: data.paymentId,
+        customerId: data.customerId ?? undefined,
+        guestName: name.trim(),
+        guestEmail: email.trim(),
+        guestPhone: phone.trim(),
+        serviceLabel: serviceLabel(),
+        whenLabel,
+      },
+    })
   }
 
   const displaySquareError = missingSquareConfig
@@ -347,6 +528,8 @@ export function BookingSection() {
   const timeSelected =
     !slotsLoadFailed && (slots.length > 0 ? !!slot : flexPreferred.trim().length > 0)
 
+  const hasBilling = billingPostal.trim().length > 0
+
   const payDisabled =
     submitting ||
     missingSquareConfig ||
@@ -354,7 +537,9 @@ export function BookingSection() {
     !!squareError ||
     slotsLoading ||
     slotsLoadFailed ||
-    !timeSelected
+    !timeSelected ||
+    !hasBilling ||
+    !terms
 
   return (
     <MotionSection
@@ -373,6 +558,23 @@ export function BookingSection() {
         <p className="mt-2 text-center font-condensed text-lg font-bold text-gold-200">
           {t('booking.depositLabel')}
         </p>
+        {showSandboxNotice && (
+          <p
+            className="mt-4 rounded-lg border border-amber-400/40 bg-amber-500/10 px-4 py-3 text-sm leading-relaxed text-amber-100/95"
+            role="status"
+          >
+            {t('booking.sandboxModeNotice')}{' '}
+            <a
+              className="font-medium text-amber-200 underline decoration-amber-200/50 underline-offset-2 hover:text-amber-50"
+              href="https://developer.squareup.com/docs/devtools/sandbox/payments"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              {t('booking.sandboxTestCardsLink')}
+            </a>
+            .
+          </p>
+        )}
 
         <form
           onSubmit={(e) => void handlePay(e)}
@@ -478,27 +680,63 @@ export function BookingSection() {
             />
           </label>
 
-          <label className="flex cursor-pointer items-start gap-3 rounded-lg border border-white/10 bg-white/5 p-3">
-            <input
-              type="checkbox"
-              checked={terms}
-              onChange={(e) => setTerms(e.target.checked)}
-              className="mt-1 size-4 shrink-0 accent-amber-500"
-            />
-            <span className="text-sm leading-snug text-white/85">{t('booking.policy')}</span>
-          </label>
-
-          <div>
-            <p className="font-condensed text-xs font-bold uppercase tracking-wider text-white/80">
-              {t('booking.cardTitle')}
-            </p>
-            {displaySquareError && (
-              <p className="mt-2 text-sm text-red-300" role="alert">
-                {displaySquareError}
+          <div className="flex flex-col gap-2">
+            <span className="font-condensed text-xs font-bold uppercase tracking-wider text-gold-200/90">
+              {t('booking.depositPolicyStep')}
+            </span>
+            <label className="flex cursor-pointer items-start gap-3 rounded-lg border border-amber-400/25 bg-amber-500/5 p-3">
+              <input
+                type="checkbox"
+                required
+                checked={terms}
+                onChange={(e) => setTerms(e.target.checked)}
+                className="mt-1 size-4 shrink-0 accent-amber-500"
+                aria-describedby={!terms ? 'book-pay-terms-hint' : undefined}
+              />
+              <span className="text-sm leading-snug text-white/90">{t('booking.policy')}</span>
+            </label>
+            {!terms && (
+              <p className="text-sm text-white/50" id="book-pay-terms-hint" role="note">
+                {t('booking.unlockPayment')}
               </p>
             )}
-            <div id={cardContainerId} className="mt-3 min-h-[110px]" />
           </div>
+
+          {terms && (
+            <>
+              <label className="flex flex-col gap-1">
+                <span className="font-condensed text-xs font-bold uppercase tracking-wider text-white/80">
+                  {t('booking.billingPostal')}
+                </span>
+                <input
+                  required
+                  autoComplete="postal-code"
+                  value={billingPostal}
+                  onChange={(e) => setBillingPostal(e.target.value)}
+                  className="rounded-lg border border-white/15 bg-black/80 px-3 py-2.5 text-white outline-none ring-gold-400/40 focus:ring-2"
+                />
+                <p className="text-xs text-white/50">{t('booking.billingPostalHelp')}</p>
+              </label>
+
+              <div>
+                <p className="font-condensed text-xs font-bold uppercase tracking-wider text-white/80">
+                  {t('booking.cardTitle')}
+                </p>
+                <p className="mt-1 text-xs leading-relaxed text-white/60">{t('booking.cardFieldHint')}</p>
+                {showSandboxNotice && (
+                  <p className="mt-2 text-xs leading-relaxed text-amber-200/90">
+                    {t('booking.cardSandboxLuhn')}
+                  </p>
+                )}
+                {displaySquareError && (
+                  <p className="mt-2 text-sm text-red-300" role="alert">
+                    {displaySquareError}
+                  </p>
+                )}
+                <div id={cardContainerId} className="mt-3 min-h-[128px]" />
+              </div>
+            </>
+          )}
 
           {message?.type === 'err' && (
             <p className="text-center text-red-300" role="alert">
