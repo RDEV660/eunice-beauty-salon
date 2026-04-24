@@ -5,7 +5,14 @@ import { fileURLToPath } from 'node:url'
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url))
 
-const dbPath = process.env.DATABASE_PATH ?? path.join(__dirname, '..', 'data', 'appointments.sqlite')
+function defaultDbPath(): string {
+  if (process.env.DATABASE_PATH) return process.env.DATABASE_PATH
+  // Vercel serverless: only /tmp is writable; DB is best-effort (use external DB for production scale).
+  if (process.env.VERCEL) return '/tmp/appointments.sqlite'
+  return path.join(__dirname, '..', 'data', 'appointments.sqlite')
+}
+
+const dbPath = defaultDbPath()
 
 let db: Database.Database | null = null
 
