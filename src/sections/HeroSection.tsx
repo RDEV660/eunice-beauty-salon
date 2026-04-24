@@ -46,7 +46,7 @@ export function HeroSection() {
   return (
     <MotionSection id="home" className="scroll-mt-20 pb-0">
       <motion.div
-        className="relative left-1/2 w-screen max-w-[100vw] -translate-x-1/2 overflow-hidden border-b border-gold-400/40 shadow-[0_12px_60px_rgba(0,0,0,0.65)]"
+        className="relative left-1/2 w-screen max-w-[100vw] -translate-x-1/2 overflow-hidden border-b border-gold-400/40 shadow-[0_8px_40px_rgba(0,0,0,0.35)]"
         initial={reduce ? false : { opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ duration: 0.65, ease: easeLux }}
@@ -65,14 +65,13 @@ export function HeroSection() {
           aria-hidden
         />
 
-        {/* Dark scrim: solid enough that copy reads clearly; video reads as dim backdrop */}
+        {/* Light scrim — keep video visible; text relies on soft shadows too */}
         <div
-          className="absolute inset-0 z-[1] bg-gradient-to-b from-[#040404]/95 via-[#050505]/88 to-[#030303]/96"
+          className="absolute inset-0 z-[1] bg-gradient-to-b from-black/35 via-black/15 to-black/40"
           aria-hidden
         />
-        <div className="absolute inset-0 z-[1] bg-black/50" aria-hidden />
         <div
-          className="absolute inset-0 z-[1] bg-gradient-to-t from-black via-black/20 to-black/50"
+          className="absolute inset-0 z-[1] bg-gradient-to-t from-black/55 via-black/5 to-black/20"
           aria-hidden
         />
 
@@ -89,24 +88,28 @@ export function HeroSection() {
             <motion.p
               className="font-serif text-lg leading-snug text-white sm:text-2xl sm:leading-snug"
               style={{
-                textShadow: '0 2px 12px rgba(0,0,0,0.9), 0 4px 32px rgba(0,0,0,0.8)',
+                textShadow:
+                  '0 1px 2px rgba(0,0,0,0.85), 0 2px 12px rgba(0,0,0,0.5), 0 4px 24px rgba(0,0,0,0.4)',
               }}
               {...lineMotion(0.08)}
             >
               {t('hero.line1')}
             </motion.p>
             <motion.p
-              className="font-serif text-base leading-relaxed text-white/95 sm:text-xl"
+              className="font-serif text-base leading-relaxed text-white sm:text-xl"
               style={{
-                textShadow: '0 2px 10px rgba(0,0,0,0.9), 0 2px 24px rgba(0,0,0,0.75)',
+                textShadow:
+                  '0 1px 2px rgba(0,0,0,0.8), 0 2px 10px rgba(0,0,0,0.45)',
               }}
               {...lineMotion(0.2)}
             >
               {t('hero.line2')}
             </motion.p>
             <motion.p
-              className="font-serif text-sm italic leading-relaxed text-gold-200 sm:text-lg"
-              style={{ textShadow: '0 2px 20px rgba(0,0,0,0.95)' }}
+              className="font-serif text-sm italic leading-relaxed text-gold-100 sm:text-lg"
+              style={{
+                textShadow: '0 1px 3px rgba(0,0,0,0.9), 0 2px 14px rgba(0,0,0,0.5)',
+              }}
               {...lineMotion(0.32)}
             >
               {t('hero.line3')}
@@ -128,7 +131,7 @@ export function HeroSection() {
                 href={WHATSAPP_HREF}
                 target="_blank"
                 rel="noopener noreferrer"
-                className={`${btnBase} border border-gold-400/50 bg-zinc-950/90 text-gold-100 shadow-[0_4px_24px_rgba(0,0,0,0.6)] transition-colors hover:border-gold-400/80 hover:bg-zinc-900/95`}
+                className={`${btnBase} border border-gold-400/45 bg-black/40 text-gold-50 shadow-[0_4px_20px_rgba(0,0,0,0.35)] backdrop-blur-sm transition-colors hover:border-gold-400/70 hover:bg-black/50`}
               >
                 <WhatsAppIcon className="h-5 w-5 shrink-0 text-[#3fe06d]" />
                 {t('hero.whatsapp')}
@@ -141,7 +144,7 @@ export function HeroSection() {
             >
               <Link
                 to="/book"
-                className={`${btnBase} border border-gold-400/60 bg-amber-500/20 text-gold-50 shadow-[0_4px_28px_rgba(0,0,0,0.5)] transition-colors hover:border-gold-300 hover:bg-amber-500/30`}
+                className={`${btnBase} border border-gold-400/55 bg-amber-400/18 text-gold-50 shadow-[0_4px_20px_rgba(0,0,0,0.3)] backdrop-blur-sm transition-colors hover:border-gold-300 hover:bg-amber-400/28`}
               >
                 {t('cta.button')}
               </Link>
@@ -154,10 +157,10 @@ export function HeroSection() {
             animate={{ opacity: 1 }}
             transition={{ delay: reduce ? 0 : 0.58, duration: 0.45 }}
           >
-            <span className="inline-flex items-center justify-center rounded-full border border-gold-400/35 bg-zinc-950/70 px-5 py-2.5 text-center font-condensed text-[0.6rem] font-semibold uppercase leading-relaxed tracking-wider text-gold-200/95 sm:px-6 sm:text-xs">
+            <span className="inline-flex items-center justify-center rounded-full border border-gold-400/40 bg-black/35 px-5 py-2.5 text-center font-condensed text-[0.6rem] font-semibold uppercase leading-relaxed tracking-wider text-gold-100 sm:px-6 sm:text-xs">
               {t('hero.badgeOpen')}
             </span>
-            <span className="inline-flex items-center justify-center rounded-full border border-white/10 bg-white/[0.06] px-5 py-2.5 font-condensed text-[0.65rem] font-semibold uppercase tracking-wider text-white/90 sm:px-6 sm:text-xs">
+            <span className="inline-flex items-center justify-center rounded-full border border-white/15 bg-white/[0.12] px-5 py-2.5 font-condensed text-[0.65rem] font-semibold uppercase tracking-wider text-white sm:px-6 sm:text-xs">
               {t('hero.badgeReviews')}
             </span>
           </motion.div>
