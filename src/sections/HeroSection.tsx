@@ -1,8 +1,10 @@
+import { useEffect, useRef } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Link } from 'react-router-dom'
 import { motion, useReducedMotion } from 'framer-motion'
 import { MotionSection } from '../components/MotionSection'
 import { WHATSAPP_HREF } from '../constants'
+import heroLogoVideo from '../assets/hero-logo.mp4'
 
 function WhatsAppIcon({ className }: { className?: string }) {
   return (
@@ -17,6 +19,20 @@ const easeLux = [0.22, 1, 0.36, 1] as const
 export function HeroSection() {
   const { t } = useTranslation()
   const reduce = useReducedMotion()
+  const heroVideoRef = useRef<HTMLVideoElement>(null)
+
+  useEffect(() => {
+    const el = heroVideoRef.current
+    if (!el) return
+    el.muted = true
+    if (reduce) {
+      el.pause()
+      return
+    }
+    void el.play().catch(() => {
+      /* Autoplay can be blocked until gesture; <video autoPlay> still helps. */
+    })
+  }, [reduce])
 
   const btnBase =
     'inline-flex min-h-[3.25rem] w-full shrink-0 items-center justify-center gap-2.5 rounded-lg px-8 font-condensed text-sm font-bold uppercase tracking-[0.16em] sm:w-auto sm:min-w-[12.5rem]'
@@ -42,14 +58,18 @@ export function HeroSection() {
             animate={{ opacity: 1, scale: 1, y: 0 }}
             transition={{ duration: 0.85, ease: easeLux, delay: reduce ? 0 : 0.06 }}
           >
-            <img
-              src="/logo.png"
+            <video
+              ref={heroVideoRef}
+              src={heroLogoVideo}
               width={1120}
               height={200}
-              alt="Eunice Beauty Salon"
               className="block h-auto w-full object-contain drop-shadow-[0_0_40px_rgba(240,200,60,0.15)]"
-              decoding="async"
-              fetchPriority="high"
+              autoPlay
+              loop
+              muted
+              playsInline
+              preload="auto"
+              aria-label="Eunice Beauty Salon"
             />
           </motion.h1>
         </div>
