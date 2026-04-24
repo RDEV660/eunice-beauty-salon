@@ -116,7 +116,8 @@
       "tokenizeClient": "Square could not create a card token. In test mode, use 4111 1111 1111 1111, a future month/year, any 3-digit CVV, a 5-digit US billing ZIP, and match your Square sandbox app. In the Network tab, a 404 to product-information is a known sandbox quirk; the important line is card-nonce (400 = bad card or wrong app/location for sandbox).",
       "paymentWithCode": "Payment could not be completed ({{code}}). Try another card or call us.",
       "unexpectedResponse": "The booking server returned an invalid response (HTTP {{status}}). If you are the site owner, check Vercel function logs and that SQUARE_* env vars are set on the project.",
-      "network": "Could not reach this site’s booking API (our server, not Square). If the card step worked, check Vercel, VITE_API_BASE, and CORS. Otherwise fix the card error first."
+      "network": "Could not reach this site’s booking API (our server, not Square). If the card step worked, check Vercel, VITE_API_BASE, and CORS. Otherwise fix the card error first.",
+      "slotBlocked": "That time is no longer available (the salon may have closed that day online). Please choose another slot or call us."
     }
   },
   "confirmed": {

@@ -1,5 +1,6 @@
 import { randomUUID } from 'node:crypto'
 import { insertAppointment } from './db.js'
+import { isFlexSlotPlaceholder, isSlotYmdBlocked } from './slotAvailability.js'
 import { getSquareClient } from './squareClientFactory.js'
 import { ensureSquareCustomer } from './squareCustomer.js'
 
@@ -86,6 +87,10 @@ export async function runDepositPayment(body: DepositBody): Promise<DepositSucce
   const locationId = process.env.SQUARE_LOCATION_ID
   if (!locationId) {
     return { ok: false, status: 500, body: { error: 'server_misconfigured' } }
+  }
+
+  if (!isFlexSlotPlaceholder(body.slotStart) && isSlotYmdBlocked(body.slotStart)) {
+    return { ok: false, status: 409, body: { error: 'slot_blocked' } }
   }
 
   const idempotencyKey = body.idempotencyKey?.trim() || randomUUID()

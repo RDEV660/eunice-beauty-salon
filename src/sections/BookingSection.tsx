@@ -3,6 +3,7 @@ import { useTranslation } from 'react-i18next'
 import { useNavigate } from 'react-router-dom'
 import { MotionSection } from '../components/MotionSection'
 import { apiUrl } from '../lib/api'
+import { SLOT_TBD } from '../lib/slotTbd'
 
 const SERVICE_KEYS = ['cut', 'color', 'treatments', 'special', 'other'] as const
 
@@ -16,9 +17,6 @@ function isSquareProductionEnv(): boolean {
 
 const SQUARE_CDN_SANDBOX = 'https://sandbox.web.squarecdn.com/v1/square.js'
 const SQUARE_CDN_PRODUCTION = 'https://web.squarecdn.com/v1/square.js'
-
-/** When the API returns no bookable times, we still take a deposit with a TBD machine-readable slot. */
-const SLOT_TBD = '2100-01-01T12:00:00.000Z'
 
 function splitName(full: string): { givenName: string; familyName: string } {
   const t = full.trim()
@@ -150,7 +148,8 @@ export function BookingSection() {
 
   useEffect(() => {
     let cancelled = false
-    ;(async () => {
+    const load = async (isInitial: boolean) => {
+      if (isInitial) setSlotsLoading(true)
       try {
         const r = await fetch(apiUrl('/api/slots?days=14'))
         if (!r.ok) {
@@ -180,13 +179,23 @@ export function BookingSection() {
           setSlots([])
         }
       } finally {
-        if (!cancelled) setSlotsLoading(false)
+        if (isInitial && !cancelled) setSlotsLoading(false)
       }
-    })()
+    }
+    void load(true)
+    const onVis = () => {
+      if (document.visibilityState === 'visible') void load(false)
+    }
+    document.addEventListener('visibilitychange', onVis)
     return () => {
       cancelled = true
+      document.removeEventListener('visibilitychange', onVis)
     }
   }, [])
+
+  useEffect(() => {
+    setSlot((prev) => (prev && !slots.includes(prev) ? '' : prev))
+  }, [slots])
 
   useEffect(() => {
     if (!squareReady) return
@@ -479,7 +488,9 @@ export function BookingSection() {
 
     if (!res.ok) {
       const code = data.error
-      if (code) {
+      if (code === 'slot_blocked') {
+        setMessage({ type: 'err', text: t('booking.errors.slotBlocked') })
+      } else if (code) {
         setMessage({
           type: 'err',
           text: t('booking.errors.paymentWithCode', { code }),
