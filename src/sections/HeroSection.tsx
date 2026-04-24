@@ -38,135 +38,128 @@ export function HeroSection() {
     'inline-flex min-h-[3.25rem] w-full shrink-0 items-center justify-center gap-2.5 rounded-lg px-8 font-condensed text-sm font-bold uppercase tracking-[0.16em] sm:w-auto sm:min-w-[12.5rem]'
 
   const lineMotion = (delay: number) => ({
-    initial: reduce ? false : { opacity: 0, y: 22 },
+    initial: reduce ? false : { opacity: 0, y: 18 },
     animate: { opacity: 1, y: 0 },
-    transition: { duration: reduce ? 0 : 0.6, delay: reduce ? 0 : delay, ease: easeLux },
+    transition: { duration: reduce ? 0 : 0.55, delay: reduce ? 0 : delay, ease: easeLux },
   })
 
   return (
     <MotionSection id="home" className="scroll-mt-20 pb-0">
       <motion.div
-        className="relative left-1/2 z-[2] w-screen max-w-[100vw] -translate-x-1/2 border-b border-gold-400/40 bg-black shadow-[0_0_60px_rgba(240,200,60,0.08)]"
+        className="relative left-1/2 w-screen max-w-[100vw] -translate-x-1/2 overflow-hidden border-b border-gold-400/40 shadow-[0_12px_60px_rgba(0,0,0,0.65)]"
         initial={reduce ? false : { opacity: 0 }}
         animate={{ opacity: 1 }}
-        transition={{ duration: 0.7, ease: easeLux }}
+        transition={{ duration: 0.65, ease: easeLux }}
       >
-        <div className="flex justify-center px-4 py-10 sm:px-8 sm:py-14">
-          <motion.h1
-            className="m-0 w-full max-w-5xl"
-            initial={reduce ? false : { opacity: 0, scale: 0.94, y: 16 }}
-            animate={{ opacity: 1, scale: 1, y: 0 }}
-            transition={{ duration: 0.85, ease: easeLux, delay: reduce ? 0 : 0.06 }}
-          >
-            <video
-              ref={heroVideoRef}
-              src={heroLogoVideo}
-              width={1120}
-              height={200}
-              className="block h-auto w-full object-contain drop-shadow-[0_0_40px_rgba(240,200,60,0.15)]"
-              autoPlay
-              loop
-              muted
-              playsInline
-              preload="auto"
-              aria-label="Eunice Beauty Salon"
-            />
-          </motion.h1>
-        </div>
-      </motion.div>
+        {/* Background video — full bleed, cropped, not a giant “strip” */}
+        <video
+          ref={heroVideoRef}
+          src={heroLogoVideo}
+          className="absolute inset-0 z-0 h-full w-full object-cover"
+          style={{ minHeight: '100%', minWidth: '100%' }}
+          autoPlay
+          loop
+          muted
+          playsInline
+          preload="auto"
+          aria-hidden
+        />
 
-      <motion.div
-        className="relative left-1/2 z-[1] w-screen max-w-[100vw] -translate-x-1/2 border-b border-gold-400/35 bg-[#080808]"
-        initial={reduce ? false : { opacity: 0, y: 24 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.75, ease: easeLux, delay: reduce ? 0 : 0.12 }}
-      >
-        <div className="mx-auto w-full max-w-3xl px-4 py-14 sm:px-8 sm:py-16">
+        {/* Dark scrim: solid enough that copy reads clearly; video reads as dim backdrop */}
+        <div
+          className="absolute inset-0 z-[1] bg-gradient-to-b from-[#040404]/95 via-[#050505]/88 to-[#030303]/96"
+          aria-hidden
+        />
+        <div className="absolute inset-0 z-[1] bg-black/50" aria-hidden />
+        <div
+          className="absolute inset-0 z-[1] bg-gradient-to-t from-black via-black/20 to-black/50"
+          aria-hidden
+        />
+
+        {/* One stack: brand + taglines + actions — all on top of the same hero */}
+        <div className="relative z-10 mx-auto flex min-h-[min(72vh,720px)] max-h-[min(88vh,900px)] w-full max-w-4xl flex-col items-center justify-center px-4 py-14 text-center sm:px-8 sm:py-20">
+          <h1 className="m-0 font-serif text-xs font-semibold tracking-[0.32em] text-gold-300/95 sm:text-sm">
+            EUNICE
+            <span className="block pt-0.5 text-[0.65rem] font-normal tracking-[0.22em] text-gold-200/75 sm:pt-1 sm:text-xs">
+              Beauty Salon
+            </span>
+          </h1>
+
+          <div className="mt-8 max-w-2xl space-y-4 sm:mt-10 sm:space-y-5">
+            <motion.p
+              className="font-serif text-lg leading-snug text-white sm:text-2xl sm:leading-snug"
+              style={{
+                textShadow: '0 2px 12px rgba(0,0,0,0.9), 0 4px 32px rgba(0,0,0,0.8)',
+              }}
+              {...lineMotion(0.08)}
+            >
+              {t('hero.line1')}
+            </motion.p>
+            <motion.p
+              className="font-serif text-base leading-relaxed text-white/95 sm:text-xl"
+              style={{
+                textShadow: '0 2px 10px rgba(0,0,0,0.9), 0 2px 24px rgba(0,0,0,0.75)',
+              }}
+              {...lineMotion(0.2)}
+            >
+              {t('hero.line2')}
+            </motion.p>
+            <motion.p
+              className="font-serif text-sm italic leading-relaxed text-gold-200 sm:text-lg"
+              style={{ textShadow: '0 2px 20px rgba(0,0,0,0.95)' }}
+              {...lineMotion(0.32)}
+            >
+              {t('hero.line3')}
+            </motion.p>
+          </div>
+
           <motion.div
-            className="rounded-2xl border border-gold-400/45 bg-black/92 px-7 py-10 shadow-[0_8px_40px_rgba(0,0,0,0.55),0_0_48px_rgba(240,200,60,0.06)] backdrop-blur-md sm:px-11 sm:py-14"
-            initial={reduce ? false : { opacity: 0, y: 20, scale: 0.99 }}
-            animate={{ opacity: 1, y: 0, scale: 1 }}
-            transition={{ duration: 0.7, ease: easeLux, delay: reduce ? 0 : 0.2 }}
+            className="mt-10 flex w-full max-w-md flex-col items-stretch justify-center gap-3 sm:mt-12 sm:max-w-none sm:flex-row sm:gap-4"
+            initial={reduce ? false : { opacity: 0, y: 12 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5, delay: reduce ? 0 : 0.45, ease: easeLux }}
           >
-            <div className="space-y-5 text-center">
-              <motion.p
-                className="font-serif text-xl leading-snug text-white sm:text-2xl sm:leading-snug"
-                style={{ textShadow: '0 2px 28px rgba(0,0,0,0.95)' }}
-                {...lineMotion(0.28)}
-              >
-                {t('hero.line1')}
-              </motion.p>
-              <motion.p
-                className="font-serif text-lg leading-relaxed text-white sm:text-xl"
-                style={{ textShadow: '0 2px 24px rgba(0,0,0,0.9)' }}
-                {...lineMotion(0.4)}
-              >
-                {t('hero.line2')}
-              </motion.p>
-              <motion.p
-                className="font-serif text-base italic leading-relaxed text-gold-300 sm:text-lg"
-                {...lineMotion(0.52)}
-              >
-                {t('hero.line3')}
-              </motion.p>
-            </div>
-
             <motion.div
-              className="mt-12 flex w-full flex-col items-stretch justify-center gap-4 sm:flex-row sm:justify-center"
-              initial={reduce ? false : { opacity: 0, y: 16 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.55, delay: reduce ? 0 : 0.62, ease: easeLux }}
+              className="w-full sm:w-auto"
+              whileHover={reduce ? undefined : { scale: 1.02, y: -1 }}
+              whileTap={reduce ? undefined : { scale: 0.99 }}
             >
-              <motion.div
-                className="w-full sm:w-auto"
-                whileHover={reduce ? undefined : { scale: 1.03, y: -2 }}
-                whileTap={reduce ? undefined : { scale: 0.98 }}
-                transition={{ type: 'spring', stiffness: 420, damping: 22 }}
+              <a
+                href={WHATSAPP_HREF}
+                target="_blank"
+                rel="noopener noreferrer"
+                className={`${btnBase} border border-gold-400/50 bg-zinc-950/90 text-gold-100 shadow-[0_4px_24px_rgba(0,0,0,0.6)] transition-colors hover:border-gold-400/80 hover:bg-zinc-900/95`}
               >
-                <a
-                  href={WHATSAPP_HREF}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className={`${btnBase} border border-gold-400/60 bg-black/50 text-gold-100 shadow-[0_0_32px_rgba(240,200,60,0.12)] transition-colors hover:border-gold-400 hover:bg-gold-500/15`}
-                >
-                  <WhatsAppIcon className="h-5 w-5 shrink-0 text-[#3fe06d]" />
-                  {t('hero.whatsapp')}
-                </a>
-              </motion.div>
-              <motion.div
-                className="w-full sm:w-auto"
-                whileHover={reduce ? undefined : { scale: 1.03, y: -2 }}
-                whileTap={reduce ? undefined : { scale: 0.98 }}
-                transition={{ type: 'spring', stiffness: 420, damping: 22 }}
-              >
-                <Link
-                  to="/book"
-                  className={`${btnBase} border border-gold-400/65 bg-gold-500/25 text-gold-100 shadow-[0_0_36px_rgba(240,200,60,0.2)] transition-colors hover:border-gold-300 hover:bg-gold-500/35`}
-                >
-                  {t('cta.button')}
-                </Link>
-              </motion.div>
+                <WhatsAppIcon className="h-5 w-5 shrink-0 text-[#3fe06d]" />
+                {t('hero.whatsapp')}
+              </a>
             </motion.div>
-
             <motion.div
-              className="mt-12 flex flex-col items-center gap-4 sm:flex-row sm:flex-wrap sm:justify-center sm:gap-x-4 sm:gap-y-4"
-              initial={reduce ? false : { opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ delay: reduce ? 0 : 0.78, duration: 0.5 }}
+              className="w-full sm:w-auto"
+              whileHover={reduce ? undefined : { scale: 1.02, y: -1 }}
+              whileTap={reduce ? undefined : { scale: 0.99 }}
             >
-              <motion.span
-                className="inline-flex max-w-xl rounded-full border border-gold-400/50 bg-black/60 px-6 py-3 text-center font-condensed text-[0.65rem] font-semibold uppercase leading-relaxed tracking-wider text-gold-200 shadow-[0_0_24px_rgba(240,200,60,0.08)] sm:text-xs"
-                whileHover={reduce ? undefined : { scale: 1.02 }}
+              <Link
+                to="/book"
+                className={`${btnBase} border border-gold-400/60 bg-amber-500/20 text-gold-50 shadow-[0_4px_28px_rgba(0,0,0,0.5)] transition-colors hover:border-gold-300 hover:bg-amber-500/30`}
               >
-                {t('hero.badgeOpen')}
-              </motion.span>
-              <motion.span
-                className="inline-flex rounded-full border border-gold-400/25 bg-white/[0.08] px-6 py-3 font-condensed text-xs font-semibold uppercase tracking-wider text-white/90"
-                whileHover={reduce ? undefined : { scale: 1.02 }}
-              >
-                {t('hero.badgeReviews')}
-              </motion.span>
+                {t('cta.button')}
+              </Link>
             </motion.div>
+          </motion.div>
+
+          <motion.div
+            className="mt-10 flex max-w-2xl flex-col items-stretch gap-3 sm:mt-12 sm:flex-row sm:flex-wrap sm:justify-center sm:gap-3"
+            initial={reduce ? false : { opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: reduce ? 0 : 0.58, duration: 0.45 }}
+          >
+            <span className="inline-flex items-center justify-center rounded-full border border-gold-400/35 bg-zinc-950/70 px-5 py-2.5 text-center font-condensed text-[0.6rem] font-semibold uppercase leading-relaxed tracking-wider text-gold-200/95 sm:px-6 sm:text-xs">
+              {t('hero.badgeOpen')}
+            </span>
+            <span className="inline-flex items-center justify-center rounded-full border border-white/10 bg-white/[0.06] px-5 py-2.5 font-condensed text-[0.65rem] font-semibold uppercase tracking-wider text-white/90 sm:px-6 sm:text-xs">
+              {t('hero.badgeReviews')}
+            </span>
           </motion.div>
         </div>
       </motion.div>
