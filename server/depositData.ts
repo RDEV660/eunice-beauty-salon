@@ -1,6 +1,7 @@
 import { randomUUID } from 'node:crypto'
 import { SquareError } from 'square'
 import { insertAppointment } from './db.js'
+import { markBookedSlotInBlobAfterPayment, isSlotStartAlreadyBooked } from './bookedSlotsStore.js'
 import { isFlexSlotPlaceholder, isSlotYmdBlocked } from './slotAvailability.js'
 import { getSquareClient } from './squareClientFactory.js'
 import { ensureSquareCustomer } from './squareCustomer.js'
@@ -149,6 +150,10 @@ export async function runDepositPayment(body: DepositBody): Promise<DepositSucce
     return { ok: false, status: 409, body: { error: 'slot_blocked' } }
   }
 
+  if (!isFlexSlotPlaceholder(body.slotStart) && (await isSlotStartAlreadyBooked(body.slotStart))) {
+    return { ok: false, status: 409, body: { error: 'slot_taken' } }
+  }
+
   const idempotencyKey = body.idempotencyKey?.trim() || randomUUID()
 
   let paymentId: string
@@ -218,6 +223,14 @@ export async function runDepositPayment(body: DepositBody): Promise<DepositSucce
   } catch (e) {
     console.error('DB after payment', e)
     return { ok: false, status: 500, body: { error: 'record_failed', paymentId } }
+  }
+
+  if (!isFlexSlotPlaceholder(body.slotStart)) {
+    try {
+      await markBookedSlotInBlobAfterPayment(body.slotStart.trim())
+    } catch (e) {
+      console.error('[eunice] CRITICAL: payment and DB ok but could not write booked slot to blob — slot may look open on other servers', e)
+    }
   }
 
   return { ok: true, paymentId, customerId: squareCustomerId ?? null }

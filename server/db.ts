@@ -95,6 +95,13 @@ export function listBookedSlotStarts(fromIso: string, toIso: string): string[] {
   return rows.map((r) => r.slot_start)
 }
 
+export function hasAppointmentAtSlotStart(slotStartIso: string): boolean {
+  const row = getDb()
+    .prepare(`SELECT 1 AS ok FROM appointments WHERE slot_start = ? LIMIT 1`)
+    .get(slotStartIso.trim()) as { ok: number } | undefined
+  return row != null
+}
+
 export function listBlockedDays(): string[] {
   const rows = getDb()
     .prepare(`SELECT ymd FROM blocked_days ORDER BY ymd`)

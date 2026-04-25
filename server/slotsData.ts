@@ -1,5 +1,6 @@
 import { getDb, listBookedSlotStarts } from './db.js'
 import { listAllBlockedYmds } from './blockedStore.js'
+import { listBookedInWindow, readAllBookedSlotStartsFromBlob } from './bookedSlotsStore.js'
 import { slotIsoToBusinessYmd } from './businessTime.js'
 import { generateCandidateSlots } from './slots.js'
 
@@ -20,7 +21,8 @@ export async function getAvailableSlotStarts(
   } catch {
     booked = []
   }
-  const bookedSet = new Set(booked)
+  const fromBlob = listBookedInWindow(await readAllBookedSlotStartsFromBlob(), from, to)
+  const bookedSet = new Set([...booked, ...fromBlob])
   const blocked = new Set(await listAllBlockedYmds())
   return candidates.filter(
     (s) => !bookedSet.has(s) && !blocked.has(slotIsoToBusinessYmd(s)),

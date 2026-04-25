@@ -484,6 +484,8 @@ export function BookingSection() {
       const code = data.error
       if (code === 'slot_blocked') {
         setMessage({ type: 'err', text: t('booking.errors.slotBlocked') })
+      } else if (code === 'slot_taken') {
+        setMessage({ type: 'err', text: t('booking.errors.slotTaken') })
       } else if (code === 'payment_declined') {
         setMessage({ type: 'err', text: t('booking.errors.paymentDeclined') })
       } else if (code === 'square_error') {

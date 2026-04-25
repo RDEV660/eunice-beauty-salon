@@ -119,7 +119,8 @@
       "paymentWithCode": "Payment could not be completed ({{code}}). Try another card or call us.",
       "unexpectedResponse": "The booking server returned an invalid response (HTTP {{status}}). If you are the site owner, check Vercel function logs and that SQUARE_* env vars are set on the project.",
       "network": "Could not reach this site’s booking API (our server, not Square). If the card step worked, check Vercel, VITE_API_BASE, and CORS. Otherwise fix the card error first.",
-      "slotBlocked": "That time is no longer available (the salon may have closed that day online). Please choose another slot or call us."
+      "slotBlocked": "That time is no longer available (the salon may have closed that day online). Please choose another slot or call us.",
+      "slotTaken": "That time was just taken by another booking. Please choose a different time or call us."
     }
   },
   "confirmed": {
