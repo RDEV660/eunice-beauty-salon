@@ -7,6 +7,9 @@ import { SLOT_TBD } from '../lib/slotTbd'
 
 const SERVICE_KEYS = ['cut', 'color', 'treatments', 'special', 'other'] as const
 
+/** String amount charged at tokenize + server createPayment; must match `DEPOSIT_CENTS` in `server/depositData.ts`. */
+const DEPOSIT_AMOUNT_STRING = '25.00'
+
 function isSquareProductionEnv(): boolean {
   return (
     String(import.meta.env.VITE_SQUARE_ENVIRONMENT ?? '')
@@ -81,6 +84,11 @@ function loadSquareScript(src: string): Promise<void> {
 }
 
 type CardTokenizeOptions = {
+  amount: string
+  currencyCode: string
+  intent: 'CHARGE' | 'CHARGE_AND_STORE'
+  customerInitiated: boolean
+  sellerKeyedIn: boolean
   billingContact: {
     givenName: string
     familyName: string
@@ -361,6 +369,11 @@ export function BookingSection() {
     setSubmitting(true)
     const { givenName, familyName } = splitName(name)
     const tokenizeOptions: CardTokenizeOptions = {
+      amount: DEPOSIT_AMOUNT_STRING,
+      currencyCode: 'USD',
+      intent: 'CHARGE',
+      customerInitiated: true,
+      sellerKeyedIn: false,
       billingContact: {
         givenName,
         familyName,
@@ -376,7 +389,6 @@ export function BookingSection() {
       return
     }
 
-    const sandboxNoBilling = isPaymentSandboxMode(appId)
     let tokenResult: {
       status: string
       token?: string
@@ -395,37 +407,11 @@ export function BookingSection() {
     try {
       tokenResult = await card.tokenize(tokenizeOptions)
     } catch (err) {
-      console.error('Square tokenize (with billing)', err)
-      if (sandboxNoBilling) {
-        try {
-          tokenResult = await card.tokenize()
-        } catch (err2) {
-          console.error('Square tokenize (sandbox, no extra args)', err2)
-          const a = extractTokenizeError(err) || t('booking.errors.tokenizeClient')
-          const b = extractTokenizeError(err2)
-          showTokenizeFailure([a, b].filter(Boolean).join(' — '))
-          setSubmitting(false)
-          return
-        }
-      } else {
-        const detail = extractTokenizeError(err)
-        showTokenizeFailure(detail || t('booking.errors.tokenizeClient'))
-        setSubmitting(false)
-        return
-      }
-    }
-
-    if (tokenResult.status !== 'OK' || !tokenResult.token) {
-      if (sandboxNoBilling) {
-        try {
-          const r2 = await card.tokenize()
-          if (r2.status === 'OK' && r2.token) {
-            tokenResult = r2
-          }
-        } catch (e3) {
-          console.error('Square tokenize retry (sandbox)', e3)
-        }
-      }
+      console.error('Square card.tokenize', err)
+      const detail = extractTokenizeError(err)
+      showTokenizeFailure(detail || t('booking.errors.tokenizeClient'))
+      setSubmitting(false)
+      return
     }
 
     if (tokenResult.status !== 'OK' || !tokenResult.token) {
