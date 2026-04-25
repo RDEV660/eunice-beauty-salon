@@ -1,6 +1,6 @@
 import { isValidYmd } from './dateYmd.js'
 import { getAdminBearerFromRequest, isAdminPasswordConfigured, isAdminToken } from './adminAuth.js'
-import { addBlockedYmd, listAllBlockedYmds, removeBlockedYmd } from './blockedStore.js'
+import { addBlockedYmd, listAllBlockedYmds, listStaffBlockedYmds, removeBlockedYmd } from './blockedStore.js'
 import type { IncomingMessage } from 'node:http'
 
 type Json =
@@ -27,7 +27,9 @@ export async function getBlockedList(req: { headers: IncomingMessage['headers'] 
   if (!isAdminToken(getAdminBearerFromRequest({ headers: req.headers })))
     return unauthorizedBody()
   try {
-    return { status: 200, body: { dates: (await listAllBlockedYmds()) as Json } }
+    const dates = await listAllBlockedYmds()
+    const staffYmds = await listStaffBlockedYmds()
+    return { status: 200, body: { dates: dates as Json, staffYmds: staffYmds as Json } }
   } catch (e) {
     console.error('[eunice] getBlockedList', e)
     return { status: 503, body: { error: 'block_list_failed' } as Json }
@@ -50,7 +52,9 @@ export async function postBlocked(
   }
   try {
     await addBlockedYmd(date)
-    return { status: 200, body: { ok: true, dates: (await listAllBlockedYmds()) as Json } }
+    const dates = await listAllBlockedYmds()
+    const staffYmds = await listStaffBlockedYmds()
+    return { status: 200, body: { ok: true, dates: dates as Json, staffYmds: staffYmds as Json } }
   } catch (e) {
     console.error('[eunice] postBlocked', e)
     return { status: 503, body: { error: 'block_persist_failed' } as Json }
@@ -69,7 +73,9 @@ export async function deleteBlocked(
   }
   try {
     const removed = await removeBlockedYmd(date)
-    return { status: 200, body: { ok: true, removed, dates: (await listAllBlockedYmds()) as Json } }
+    const dates = await listAllBlockedYmds()
+    const staffYmds = await listStaffBlockedYmds()
+    return { status: 200, body: { ok: true, removed, dates: dates as Json, staffYmds: staffYmds as Json } }
   } catch (e) {
     console.error('[eunice] deleteBlocked', e)
     return { status: 503, body: { error: 'block_persist_failed' } as Json }

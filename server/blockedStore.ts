@@ -37,7 +37,7 @@ async function readBlobYmdsFromStore(): Promise<string[]> {
   if (!hasBlobStore()) return []
   try {
     const { get, BlobNotFoundError } = await import('@vercel/blob')
-    const result = await get(BLOB_PATH, { access: 'private' })
+    const result = await get(BLOB_PATH, { access: 'private', useCache: false })
     if (result == null) return []
     if (result.statusCode !== 200 || !result.stream) return []
     const json = await new Response(result.stream as unknown as BodyInit).text()
@@ -84,6 +84,11 @@ function listSqliteYmdsOrEmpty(): string[] {
 /**
  * All blocked calendar days: env + SQLite + Blob (deduped). Any source may be empty.
  */
+/** Y-M-D the staff can add/remove in admin (not from BLOCKED_DAYS). */
+export async function listStaffBlockedYmds(): Promise<string[]> {
+  return mergeUnique([...listSqliteYmdsOrEmpty(), ...(hasBlobStore() ? await readBlobYmdsFromStore() : [])])
+}
+
 export async function listAllBlockedYmds(): Promise<string[]> {
   const env = parseEnvBlocks()
   const sql = listSqliteYmdsOrEmpty()

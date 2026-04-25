@@ -174,6 +174,7 @@
     "blockedList": "Currently blocked",
     "noBlocked": "No full days are blocked. Customers see the normal weekly hours.",
     "unblock": "Unblock",
+    "lockedInEnv": "In env (Vercel settings)",
     "invalidDate": "Check the date and try again.",
     "vercelStorageHint": "On Vercel: Vercel → your project → Storage → Blob, create a store, then add BLOB_READ_WRITE_TOKEN to the project and redeploy. The staff list saves to a tiny file in that store so booking and admin always match. Local dev: leave it unset; the app uses the SQLite file under data/."
   }

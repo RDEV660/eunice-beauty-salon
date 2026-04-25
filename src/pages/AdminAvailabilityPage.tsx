@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from 'react'
+import { useCallback, useEffect, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Link } from 'react-router-dom'
 import { apiUrl } from '../lib/api'
@@ -9,55 +9,75 @@ function authHeaders(token: string): HeadersInit {
   return { Authorization: `Bearer ${token}` }
 }
 
+type BlockListResponse = { dates?: string[]; staffYmds?: string[]; error?: string }
+
+function setListsFromData(data: BlockListResponse, setDates: (d: string[]) => void, setStaff: (d: string[]) => void) {
+  setDates(data.dates ?? [])
+  if (Array.isArray(data.staffYmds)) {
+    setStaff(data.staffYmds)
+  } else {
+    setStaff(data.dates ?? [])
+  }
+}
+
 export function AdminAvailabilityPage() {
-  const { t } = useTranslation()
+  const { t, i18n } = useTranslation()
   const [token, setToken] = useState(() => sessionStorage.getItem(STORAGE_KEY) ?? '')
   const [input, setInput] = useState('')
   const [dates, setDates] = useState<string[]>([])
+  const [staffYmds, setStaffYmds] = useState<string[]>([])
   const [addDate, setAddDate] = useState('')
   const [error, setError] = useState<string | null>(null)
-  const [loading, setLoading] = useState(false)
+  const [listLoading, setListLoading] = useState(false)
+  const [busy, setBusy] = useState(false)
+  const skipLoadAfterLogin = useRef(false)
   const authed = Boolean(token)
 
   const load = useCallback(async () => {
     if (!token) return
-    setLoading(true)
+    setListLoading(true)
     setError(null)
     try {
       const r = await fetch(apiUrl('/api/admin/blocked'), { headers: authHeaders(token) })
-      const data = (await r.json()) as { dates?: string[]; error?: string }
+      const data = (await r.json()) as BlockListResponse
       if (r.status === 401) {
         sessionStorage.removeItem(STORAGE_KEY)
         setToken('')
         setDates([])
-        setError(t('admin.wrongPassword'))
+        setStaffYmds([])
+        setError(i18n.t('admin.wrongPassword'))
         return
       }
       if (r.status === 501) {
-        setError(t('admin.notConfigured'))
+        setError(i18n.t('admin.notConfigured'))
         return
       }
       if (!r.ok) {
-        setError(t('admin.loadError'))
+        setError(i18n.t('admin.loadError'))
         return
       }
-      setDates(data.dates ?? [])
+      setListsFromData(data, setDates, setStaffYmds)
     } catch {
-      setError(t('admin.loadError'))
+      setError(i18n.t('admin.loadError'))
     } finally {
-      setLoading(false)
+      setListLoading(false)
     }
-  }, [token, t])
+  }, [token, i18n])
 
   useEffect(() => {
-    if (token) void load()
+    if (!token) return
+    if (skipLoadAfterLogin.current) {
+      skipLoadAfterLogin.current = false
+      return
+    }
+    void load()
   }, [token, load])
 
   async function login(e: React.FormEvent) {
     e.preventDefault()
     const pass = input.trim()
     if (!pass) return
-    setLoading(true)
+    setBusy(true)
     setError(null)
     try {
       const r = await fetch(apiUrl('/api/admin/blocked'), { headers: authHeaders(pass) })
@@ -73,15 +93,16 @@ export function AdminAvailabilityPage() {
         setError(t('admin.loadError'))
         return
       }
-      const data = (await r.json()) as { dates?: string[] }
+      const data = (await r.json()) as BlockListResponse
       sessionStorage.setItem(STORAGE_KEY, pass)
+      skipLoadAfterLogin.current = true
       setToken(pass)
       setInput('')
-      setDates(data.dates ?? [])
+      setListsFromData(data, setDates, setStaffYmds)
     } catch {
       setError(t('admin.loadError'))
     } finally {
-      setLoading(false)
+      setBusy(false)
     }
   }
 
@@ -89,13 +110,14 @@ export function AdminAvailabilityPage() {
     sessionStorage.removeItem(STORAGE_KEY)
     setToken('')
     setDates([])
+    setStaffYmds([])
     setError(null)
   }
 
   async function add() {
     const d = addDate.trim()
     if (!d || !token) return
-    setLoading(true)
+    setBusy(true)
     setError(null)
     try {
       const r = await fetch(apiUrl('/api/admin/blocked'), {
@@ -103,7 +125,7 @@ export function AdminAvailabilityPage() {
         headers: { ...authHeaders(token), 'Content-Type': 'application/json' },
         body: JSON.stringify({ date: d }),
       })
-      const data = (await r.json()) as { dates?: string[]; error?: string }
+      const data = (await r.json()) as BlockListResponse
       if (r.status === 401) {
         logout()
         setError(t('admin.wrongPassword'))
@@ -121,25 +143,25 @@ export function AdminAvailabilityPage() {
         setError(t('admin.saveError'))
         return
       }
-      setDates(data.dates ?? [])
+      setListsFromData(data, setDates, setStaffYmds)
       setAddDate('')
     } catch {
       setError(t('admin.saveError'))
     } finally {
-      setLoading(false)
+      setBusy(false)
     }
   }
 
   async function remove(ymd: string) {
     if (!token) return
-    setLoading(true)
+    setBusy(true)
     setError(null)
     try {
       const r = await fetch(apiUrl(`/api/admin/blocked?date=${encodeURIComponent(ymd)}`), {
         method: 'DELETE',
         headers: authHeaders(token),
       })
-      const data = (await r.json()) as { dates?: string[]; error?: string }
+      const data = (await r.json()) as BlockListResponse
       if (r.status === 401) {
         logout()
         setError(t('admin.wrongPassword'))
@@ -153,11 +175,11 @@ export function AdminAvailabilityPage() {
         setError(t('admin.saveError'))
         return
       }
-      setDates(data.dates ?? [])
+      setListsFromData(data, setDates, setStaffYmds)
     } catch {
       setError(t('admin.saveError'))
     } finally {
-      setLoading(false)
+      setBusy(false)
     }
   }
 
@@ -189,10 +211,10 @@ export function AdminAvailabilityPage() {
           {error && <p className="text-sm text-rose-400">{error}</p>}
           <button
             type="submit"
-            disabled={loading || !input.trim()}
+            disabled={busy || !input.trim()}
             className="rounded-lg bg-gold-500/90 px-4 py-2 text-sm font-medium text-black transition enabled:hover:bg-gold-400 disabled:opacity-50"
           >
-            {loading ? t('admin.working') : t('admin.continue')}
+            {busy ? t('admin.working') : t('admin.continue')}
           </button>
         </form>
       ) : (
@@ -220,7 +242,7 @@ export function AdminAvailabilityPage() {
               <button
                 type="button"
                 onClick={() => void add()}
-                disabled={loading || !addDate}
+                disabled={busy || !addDate}
                 className="rounded-lg border border-gold-500/50 bg-gold-500/15 px-4 py-2 text-sm text-gold-100 transition enabled:hover:bg-gold-500/25 disabled:opacity-50"
               >
                 {t('admin.addDay')}
@@ -230,28 +252,37 @@ export function AdminAvailabilityPage() {
 
           <div>
             <h2 className="text-sm font-medium text-gold-300/95">{t('admin.blockedList')}</h2>
-            {loading && dates.length === 0 ? (
+            {listLoading && dates.length === 0 ? (
               <p className="mt-2 text-sm text-white/50">{t('admin.working')}</p>
             ) : dates.length === 0 ? (
               <p className="mt-2 text-sm text-white/50">{t('admin.noBlocked')}</p>
             ) : (
               <ul className="mt-3 space-y-2">
-                {dates.map((d) => (
-                  <li
-                    key={d}
-                    className="flex items-center justify-between gap-3 rounded-lg border border-white/10 bg-white/5 px-3 py-2"
-                  >
-                    <span className="font-mono text-sm text-white/90">{d}</span>
-                    <button
-                      type="button"
-                      onClick={() => void remove(d)}
-                      disabled={loading}
-                      className="text-sm text-rose-400/95 underline-offset-4 hover:underline disabled:opacity-50"
+                {dates.map((d) => {
+                  const canUnblock = staffYmds.includes(d)
+                  return (
+                    <li
+                      key={d}
+                      className="flex items-center justify-between gap-3 rounded-lg border border-white/10 bg-white/5 px-3 py-2"
                     >
-                      {t('admin.unblock')}
-                    </button>
-                  </li>
-                ))}
+                      <span className="font-mono text-sm text-white/90">{d}</span>
+                      {canUnblock ? (
+                        <button
+                          type="button"
+                          onClick={() => void remove(d)}
+                          disabled={busy}
+                          className="shrink-0 text-sm text-rose-400/95 underline-offset-4 hover:underline disabled:opacity-50"
+                        >
+                          {t('admin.unblock')}
+                        </button>
+                      ) : (
+                        <span className="shrink-0 text-right text-xs text-white/45" title={t('admin.lockedInEnv')}>
+                          {t('admin.lockedInEnv')}
+                        </span>
+                      )}
+                    </li>
+                  )
+                })}
               </ul>
             )}
           </div>
