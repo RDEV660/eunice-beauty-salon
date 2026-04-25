@@ -37,17 +37,17 @@ export default async function handler(req: IncomingMessage, res: ServerResponse)
   }
   const result = await runDepositPayment(body)
   res.setHeader('Content-Type', 'application/json')
-  if (!result.ok) {
-    res.statusCode = result.status
-    res.end(JSON.stringify(result.body))
+  if (result.ok) {
+    res.statusCode = 200
+    res.end(
+      JSON.stringify({
+        ok: true,
+        paymentId: result.paymentId,
+        customerId: result.customerId,
+      }),
+    )
     return
   }
-  res.statusCode = 200
-  res.end(
-    JSON.stringify({
-      ok: true,
-      paymentId: result.paymentId,
-      customerId: result.customerId,
-    }),
-  )
+  res.statusCode = result.status
+  res.end(JSON.stringify(result.body))
 }
