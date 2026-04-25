@@ -112,6 +112,8 @@
       "fill": "Completa todos los campos obligatorios.",
       "preferredTime": "Escribe la fecha y hora que te convienen.",
       "payment": "No se pudo completar el pago. Prueba otra tarjeta o llámanos.",
+      "paymentDeclined": "El banco rechazó la tarjeta o no se pudo realizar el cargo. Prueba otra tarjeta u otro método. También puedes llamarnos para reservar.",
+      "squareServiceError": "No pudimos completar la conexión con el sistema de pagos. Vuelve a intentar en unos minutos o llámanos para reservar.",
       "cardValidation": "{{detail}}",
       "tokenizeClient": "Square no pudo crear el token de la tarjeta. En pruebas, usa 4111 1111 1111 1111, mes/año futuro, CVV de 3 cifras, un código ZIP de 5 cifras y la app en modo sandbox. En la pestaña Red, un 404 a product-information suele ser normal; lo importante es card-nonce (400 = tarjeta o app/local incorrecta en sandbox).",
       "paymentWithCode": "No se pudo completar el pago ({{code}}). Prueba otra tarjeta o llámanos.",

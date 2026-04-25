@@ -74,6 +74,60 @@ export type DepositBody = {
 export type DepositSuccess = { ok: true; paymentId: string; customerId: string | null }
 export type DepositFailure = { ok: false; status: number; body: Record<string, unknown> }
 
+/** Square `CreatePayment` throws on most failures; map card/business errors to 402, not 502. */
+function failureFromSquareError(e: SquareError): DepositFailure {
+  const first = e.errors?.[0]
+  const detail =
+    typeof first?.detail === 'string' && first.detail.trim()
+      ? first.detail.trim().slice(0, 200)
+      : undefined
+  const category = first?.category != null ? String(first.category) : ''
+  const code = first?.code != null ? String(first.code) : ''
+
+  if (
+    category === 'AUTHENTICATION_ERROR' ||
+    code === 'UNAUTHORIZED' ||
+    code === 'ACCESS_TOKEN_EXPIRED' ||
+    code === 'ACCESS_TOKEN_REVOKED' ||
+    code === 'INSUFFICIENT_SCOPES' ||
+    code === 'FORBIDDEN' ||
+    code === 'CLIENT_DISABLED'
+  ) {
+    return { ok: false, status: 500, body: { error: 'server_misconfigured', detail } }
+  }
+
+  if (category === 'PAYMENT_METHOD_ERROR') {
+    return { ok: false, status: 402, body: { error: 'payment_declined', detail, code } }
+  }
+
+  if (category === 'INVALID_REQUEST_ERROR' && isLikelyCardPaymentErrorCode(code)) {
+    return { ok: false, status: 402, body: { error: 'payment_declined', detail, code } }
+  }
+
+  if (e.statusCode !== undefined && e.statusCode >= 400 && e.statusCode < 500) {
+    if (isLikelyCardPaymentErrorCode(code)) {
+      return { ok: false, status: 402, body: { error: 'payment_declined', detail, code } }
+    }
+  }
+
+  return { ok: false, status: 502, body: { error: 'square_error', detail } }
+}
+
+function isLikelyCardPaymentErrorCode(code: string): boolean {
+  if (!code) return false
+  if (code === 'CARD_DECLINED' || code === 'GENERIC_DECLINE' || code === 'CVV_FAILURE') return true
+  if (code === 'INSUFFICIENT_FUNDS' || code === 'INVALID_CARD' || code === 'CARD_EXPIRED') return true
+  if (code === 'PAYMENT_LIMIT_EXCEEDED' || code === 'TRANSACTION_LIMIT') return true
+  if (code === 'VERIFY_CVV_FAILURE' || code === 'VERIFY_AVS_FAILURE') return true
+  if (code === 'CARD_DECLINED_CALL_ISSUER' || code === 'CARD_DECLINED_VERIFICATION_REQUIRED') return true
+  if (code === 'INVALID_POSTAL_CODE' || code === 'ADDRESS_VERIFICATION_FAILURE') return true
+  if (code === 'BUYER_REFUSED_PAYMENT' || code === 'VOICE_FAILURE' || code === 'PAN_FAILURE') return true
+  if (code === 'SOURCE_EXPIRED' || code === 'SOURCE_USED' || code === 'CARD_TOKEN_EXPIRED') return true
+  if (code === 'CURRENCY_MISMATCH' || code === 'PAYMENT_AMOUNT_MISMATCH' || code === 'LOCATION_MISMATCH') return true
+  if (code === 'ACCOUNT_UNUSABLE' || code === 'READER_DECLINED' || code === 'CARD_NOT_SUPPORTED') return true
+  return false
+}
+
 export async function runDepositPayment(body: DepositBody): Promise<DepositSuccess | DepositFailure> {
   if (!body?.termsAccepted) {
     return { ok: false, status: 400, body: { error: 'terms_required' } }
@@ -145,19 +199,7 @@ export async function runDepositPayment(body: DepositBody): Promise<DepositSucce
       return { ok: false, status: 500, body: { error: 'server_misconfigured' } }
     }
     if (e instanceof SquareError) {
-      const first = e.errors?.[0]
-      const detail =
-        typeof first?.detail === 'string' && first.detail.trim()
-          ? first.detail.trim().slice(0, 200)
-          : undefined
-      return {
-        ok: false,
-        status: 502,
-        body: {
-          error: 'square_error',
-          ...(detail ? { detail } : {}),
-        },
-      }
+      return failureFromSquareError(e)
     }
     return { ok: false, status: 502, body: { error: 'square_error' } }
   }

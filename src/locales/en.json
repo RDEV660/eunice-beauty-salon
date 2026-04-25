@@ -112,6 +112,8 @@
       "fill": "Please complete all required fields.",
       "preferredTime": "Please enter your preferred date and time.",
       "payment": "Payment could not be completed. Try another card or call us.",
+      "paymentDeclined": "The bank declined this card (or the charge was not allowed). Try another card or use a different payment method. You can also call us to book.",
+      "squareServiceError": "We could not complete the connection to the payment system. Please try again in a few minutes, or call us to book.",
       "cardValidation": "{{detail}}",
       "tokenizeClient": "Square could not create a card token. In test mode, use 4111 1111 1111 1111, a future month/year, any 3-digit CVV, a 5-digit US billing ZIP, and match your Square sandbox app. In the Network tab, a 404 to product-information is a known sandbox quirk; the important line is card-nonce (400 = bad card or wrong app/location for sandbox).",
       "paymentWithCode": "Payment could not be completed ({{code}}). Try another card or call us.",

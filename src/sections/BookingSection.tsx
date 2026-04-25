@@ -458,7 +458,13 @@ export function BookingSection() {
     }
 
     const raw = await res.text()
-    type ErrBody = { error?: string; ok?: boolean; paymentId?: string; customerId?: string | null }
+    type ErrBody = {
+      error?: string
+      ok?: boolean
+      paymentId?: string
+      customerId?: string | null
+      detail?: string
+    }
     let data: ErrBody
     try {
       data = raw ? (JSON.parse(raw) as ErrBody) : {}
@@ -476,6 +482,10 @@ export function BookingSection() {
       const code = data.error
       if (code === 'slot_blocked') {
         setMessage({ type: 'err', text: t('booking.errors.slotBlocked') })
+      } else if (code === 'payment_declined') {
+        setMessage({ type: 'err', text: t('booking.errors.paymentDeclined') })
+      } else if (code === 'square_error') {
+        setMessage({ type: 'err', text: t('booking.errors.squareServiceError') })
       } else if (code) {
         setMessage({
           type: 'err',
