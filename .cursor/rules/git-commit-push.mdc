@@ -1,0 +1,14 @@
+---
+description: After editing project code, commit and push to origin unless the user opts out
+alwaysApply: true
+---
+
+# Git: commit and push after code changes
+
+When you change tracked source files in this repo (not only suggestions), end the task with:
+
+1. `git status` — stage what belongs in the change.
+2. `git commit` with a short, accurate message.
+3. `git push` to the current branch (usually `main`).
+
+Skip push only if the user asked not to, or the repo has no `origin`, or a push is impossible from this environment.
