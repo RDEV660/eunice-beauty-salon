@@ -1,4 +1,5 @@
 import { randomUUID } from 'node:crypto'
+import { SquareError } from 'square'
 import { insertAppointment } from './db.js'
 import { isFlexSlotPlaceholder, isSlotYmdBlocked } from './slotAvailability.js'
 import { getSquareClient } from './squareClientFactory.js'
@@ -122,6 +123,11 @@ export async function runDepositPayment(body: DepositBody): Promise<DepositSucce
       ...(squareCustomerId ? { customerId: squareCustomerId } : {}),
       note: buildSquarePaymentNote(body),
       buyerEmailAddress: body.email.trim(),
+      // Card-not-present, customer pays in the browser (not MOTO) — required by current Square policy.
+      customerDetails: {
+        customerInitiated: true,
+        sellerKeyedIn: false,
+      },
     })
     const errors = resp.errors
     if (errors?.length) {
@@ -134,7 +140,25 @@ export async function runDepositPayment(body: DepositBody): Promise<DepositSucce
     }
     paymentId = pay.id
   } catch (e) {
-    console.error(e)
+    console.error('Square CreatePayment', e)
+    if (e instanceof Error && e.message.includes('SQUARE_ACCESS_TOKEN')) {
+      return { ok: false, status: 500, body: { error: 'server_misconfigured' } }
+    }
+    if (e instanceof SquareError) {
+      const first = e.errors?.[0]
+      const detail =
+        typeof first?.detail === 'string' && first.detail.trim()
+          ? first.detail.trim().slice(0, 200)
+          : undefined
+      return {
+        ok: false,
+        status: 502,
+        body: {
+          error: 'square_error',
+          ...(detail ? { detail } : {}),
+        },
+      }
+    }
     return { ok: false, status: 502, body: { error: 'square_error' } }
   }
 
