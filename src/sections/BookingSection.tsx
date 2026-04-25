@@ -8,7 +8,7 @@ import { SLOT_TBD } from '../lib/slotTbd'
 const SERVICE_KEYS = ['cut', 'color', 'treatments', 'special', 'other'] as const
 
 /** String amount charged at tokenize + server createPayment; must match `DEPOSIT_CENTS` in `server/depositData.ts`. */
-const DEPOSIT_AMOUNT_STRING = '25.00'
+const DEPOSIT_AMOUNT_STRING = '1.00'
 
 function isSquareProductionEnv(): boolean {
   return (

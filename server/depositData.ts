@@ -6,7 +6,7 @@ import { getSquareClient } from './squareClientFactory.js'
 import { ensureSquareCustomer } from './squareCustomer.js'
 
 /** Cents charged; `BookingSection` `DEPOSIT_AMOUNT_STRING` must match for Square tokenize. */
-const DEPOSIT_CENTS = 2500
+const DEPOSIT_CENTS = 100
 /** Shown in Square transaction note + stored appointment note for the owner (Texas default). */
 const DEFAULT_BUSINESS_TZ = 'America/Chicago'
 const MAX_SQUARE_PAYMENT_NOTE_LEN = 500
