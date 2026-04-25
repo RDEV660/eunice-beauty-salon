@@ -36,7 +36,7 @@ function hasBlobStore(): boolean {
 async function readBlobYmdsFromStore(): Promise<string[]> {
   if (!hasBlobStore()) return []
   try {
-    const { get, BlobNotFoundError } = await import('@vercel/blob')
+    const { get } = await import('@vercel/blob')
     const result = await get(BLOB_PATH, { access: 'private', useCache: false })
     if (result == null) return []
     if (result.statusCode !== 200 || !result.stream) return []
