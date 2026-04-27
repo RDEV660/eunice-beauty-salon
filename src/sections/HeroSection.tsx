@@ -48,34 +48,31 @@ export function HeroSection() {
           className="absolute inset-0 z-0 bg-[radial-gradient(ellipse_90%_60%_at_50%_20%,rgba(180,150,60,0.12),transparent_55%),radial-gradient(ellipse_70%_50%_at_50%_100%,rgba(0,0,0,0.5),#050505)]"
           aria-hidden
         />
-        {/* Large watermark — sits behind the veils; taglines + actions read in front */}
         <div
-          className="pointer-events-none absolute inset-0 z-0 flex items-center justify-center px-2 py-10 sm:px-5 sm:py-16"
-          aria-hidden
-        >
-          <img
-            src="/hero-logo.png"
-            alt=""
-            width={960}
-            height={280}
-            loading="eager"
-            decoding="async"
-            className="h-auto w-full max-w-[min(100%,min(92vw,58rem))] scale-[1.05] object-contain object-center opacity-[0.11] [filter:drop-shadow(0_4px_40px_rgba(0,0,0,0.5))] sm:max-w-[min(100%,64rem)] sm:opacity-[0.15] md:scale-110"
-          />
-        </div>
-        <div
-          className="absolute inset-0 z-[1] bg-gradient-to-b from-black/40 via-black/20 to-black/50"
-          aria-hidden
-        />
-        <div
-          className="absolute inset-0 z-[1] bg-gradient-to-t from-black/70 via-transparent to-black/40"
+          className="absolute inset-0 z-[1] bg-gradient-to-b from-black/20 via-black/5 to-black/50"
           aria-hidden
         />
 
-        {/* Taglines + actions — h1 is screen-reader only (visible brand is the watermark) */}
-        <div className="relative z-10 mx-auto flex min-h-[min(72vh,720px)] max-h-[min(88vh,900px)] w-full max-w-3xl flex-col items-center justify-center px-4 py-12 text-center sm:px-6 sm:py-20">
-          <h1 className="sr-only">{t('hero.brand')}</h1>
-          <div className="max-w-2xl space-y-3 sm:space-y-3.5">
+        {/* Stacked: full-opacity logo, then copy + CTAs (no overlay on the mark) */}
+        <div className="relative z-10 mx-auto flex w-full max-w-3xl flex-col items-center px-4 pb-14 pt-8 text-center sm:px-6 sm:pb-16 sm:pt-10 md:min-h-[min(70vh,680px)] md:pb-20 md:pt-12">
+          <motion.h1
+            className="m-0 flex w-full max-w-2xl justify-center px-1 sm:max-w-3xl md:max-w-4xl"
+            initial={reduce ? false : { opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: reduce ? 0 : 0.5, ease: easeLux }}
+          >
+            <img
+              src="/hero-logo.png"
+              alt={t('hero.logoAlt')}
+              width={960}
+              height={280}
+              loading="eager"
+              decoding="async"
+              className="h-auto w-full max-w-[min(100%,40rem)] object-contain object-center [filter:drop-shadow(0_6px_32px_rgba(0,0,0,0.6))] sm:max-w-[min(100%,44rem)]"
+            />
+          </motion.h1>
+
+          <div className="mt-7 max-w-2xl space-y-3 sm:mt-9 sm:space-y-3.5">
             <motion.p
               className="font-condensed text-sm leading-snug text-white/95 sm:text-base"
               style={{ textShadow: '0 1px 3px rgba(0,0,0,0.9)' }}
