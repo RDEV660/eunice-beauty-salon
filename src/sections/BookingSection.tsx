@@ -1,17 +1,10 @@
 import { useId, useEffect, useLayoutEffect, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useNavigate } from 'react-router-dom'
-import { FullServiceMenu } from '../components/FullServiceMenu'
 import { MotionSection } from '../components/MotionSection'
 import { apiUrl } from '../lib/api'
 import { SLOT_TBD } from '../lib/slotTbd'
-import {
-  DEFAULT_SERVICE_ID,
-  getServiceSelectGroups,
-  SERVICES_PAGE_BEAUTY_IDS,
-  SERVICES_PAGE_HAIR_IDS,
-  type ServiceItemId,
-} from '../lib/serviceItems'
+import { DEFAULT_SERVICE_ID, getServiceSelectGroups, type ServiceItemId } from '../lib/serviceItems'
 
 /** String amount charged at tokenize + server createPayment; must match `DEPOSIT_CENTS` in `server/depositData.ts`. */
 const DEPOSIT_AMOUNT_STRING = '25.00'
@@ -577,24 +570,6 @@ export function BookingSection() {
         <p className="mt-2 text-center font-condensed text-lg font-bold text-gold-200">
           {t('booking.depositLabel')}
         </p>
-        <p className="mx-auto mt-4 max-w-2xl text-center text-xs leading-relaxed text-white/60 sm:text-sm">
-          {t('booking.menuIntro')}
-        </p>
-        <div className="mt-6 max-h-[min(70vh,520px)] overflow-y-auto rounded-xl border border-gold-400/20 bg-black/50 p-4 sm:p-5">
-          <div className="grid gap-6 md:grid-cols-2 md:gap-8">
-            <div>
-              <h3 className="mb-3 font-serif text-base text-gold-200 sm:text-lg">{t('services.hairTitle')}</h3>
-              <FullServiceMenu t={t} serviceIds={SERVICES_PAGE_HAIR_IDS} />
-            </div>
-            <div>
-              <h3 className="mb-3 font-serif text-base text-gold-200 sm:text-lg">{t('services.beautyTitle')}</h3>
-              <FullServiceMenu t={t} serviceIds={SERVICES_PAGE_BEAUTY_IDS} />
-            </div>
-          </div>
-          <p className="mt-4 text-center text-[0.7rem] leading-relaxed text-white/45 sm:text-xs">
-            {t('services.footnote')}
-          </p>
-        </div>
         {showSandboxNotice && (
           <p
             className="mt-4 rounded-lg border border-amber-400/40 bg-amber-500/10 px-4 py-3 text-sm leading-relaxed text-amber-100/95"

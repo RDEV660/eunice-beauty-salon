@@ -71,7 +71,6 @@
     "backHome": "Volver al inicio",
     "title": "Reserva con depósito",
     "subtitle": "Se requiere un depósito de $25 para apartar tu cita. Los depósitos no son reembolsables.",
-    "menuIntro": "Menú de servicios y precios (el mismo de la sección Servicios; elígelo en el formulario de abajo).",
     "depositLabel": "Depósito de $25.00 (USD)",
     "sandboxModeNotice": "Este pago está en modo de pruebas (sandbox) de Square. Las tarjetas reales se rechazan; solo sirven las tarjetas de prueba de Square. Para cobrar con tarjetas reales, el sitio debe usar ID de app, local y access token de producción con VITE_SQUARE_ENVIRONMENT=production y volver a desplegar.",
     "sandboxTestCardsLink": "Tarjetas de prueba de Square (sandbox)",

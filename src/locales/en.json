@@ -71,7 +71,6 @@
     "backHome": "Back to home",
     "title": "Book with deposit",
     "subtitle": "A $25 deposit is required to reserve your appointment. Deposits are non-refundable.",
-    "menuIntro": "Service menu & prices (matches our main Services section — pick the same in the form below).",
     "depositLabel": "$25.00 deposit (USD)",
     "sandboxModeNotice": "This payment is in Square test (sandbox) mode. Real credit cards are always declined—only Square test card numbers will work. To take real money, the site must use production App ID, Location, and access token with VITE_SQUARE_ENVIRONMENT=production, then be redeployed.",
     "sandboxTestCardsLink": "Square’s sandbox test cards",
