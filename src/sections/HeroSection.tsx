@@ -48,6 +48,21 @@ export function HeroSection() {
           className="absolute inset-0 z-0 bg-[radial-gradient(ellipse_90%_60%_at_50%_20%,rgba(180,150,60,0.12),transparent_55%),radial-gradient(ellipse_70%_50%_at_50%_100%,rgba(0,0,0,0.5),#050505)]"
           aria-hidden
         />
+        {/* Large watermark — sits behind the veils; taglines + actions read in front */}
+        <div
+          className="pointer-events-none absolute inset-0 z-0 flex items-center justify-center px-2 py-10 sm:px-5 sm:py-16"
+          aria-hidden
+        >
+          <img
+            src="/hero-logo.png"
+            alt=""
+            width={960}
+            height={280}
+            loading="eager"
+            decoding="async"
+            className="h-auto w-full max-w-[min(100%,min(92vw,58rem))] scale-[1.05] object-contain object-center opacity-[0.11] [filter:drop-shadow(0_4px_40px_rgba(0,0,0,0.5))] sm:max-w-[min(100%,64rem)] sm:opacity-[0.15] md:scale-110"
+          />
+        </div>
         <div
           className="absolute inset-0 z-[1] bg-gradient-to-b from-black/40 via-black/20 to-black/50"
           aria-hidden
@@ -57,26 +72,10 @@ export function HeroSection() {
           aria-hidden
         />
 
-        {/* One stack: logo image + taglines + actions — all on top of the same hero */}
+        {/* Taglines + actions — h1 is screen-reader only (visible brand is the watermark) */}
         <div className="relative z-10 mx-auto flex min-h-[min(72vh,720px)] max-h-[min(88vh,900px)] w-full max-w-3xl flex-col items-center justify-center px-4 py-12 text-center sm:px-6 sm:py-20">
-          <motion.h1
-            className="m-0 flex w-full max-w-2xl justify-center px-1 sm:max-w-3xl md:max-w-4xl"
-            initial={reduce ? false : { opacity: 0, y: 12 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: reduce ? 0 : 0.55, ease: easeLux }}
-          >
-            <img
-              src="/hero-logo.png"
-              alt={t('hero.logoAlt')}
-              width={960}
-              height={280}
-              loading="eager"
-              decoding="async"
-              className="h-auto w-full max-w-[min(100%,42rem)] object-contain object-center [filter:drop-shadow(0_6px_28px_rgba(0,0,0,0.75))]"
-            />
-          </motion.h1>
-
-          <div className="mt-6 max-w-2xl space-y-3 sm:mt-8 sm:space-y-3.5">
+          <h1 className="sr-only">{t('hero.brand')}</h1>
+          <div className="max-w-2xl space-y-3 sm:space-y-3.5">
             <motion.p
               className="font-condensed text-sm leading-snug text-white/95 sm:text-base"
               style={{ textShadow: '0 1px 3px rgba(0,0,0,0.9)' }}
