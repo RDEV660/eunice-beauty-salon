@@ -1,11 +1,17 @@
 import { useId, useEffect, useLayoutEffect, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useNavigate } from 'react-router-dom'
+import { FullServiceMenu } from '../components/FullServiceMenu'
 import { MotionSection } from '../components/MotionSection'
 import { apiUrl } from '../lib/api'
 import { SLOT_TBD } from '../lib/slotTbd'
-
-const SERVICE_KEYS = ['cut', 'color', 'treatments', 'special', 'other'] as const
+import {
+  DEFAULT_SERVICE_ID,
+  getServiceSelectGroups,
+  SERVICES_PAGE_BEAUTY_IDS,
+  SERVICES_PAGE_HAIR_IDS,
+  type ServiceItemId,
+} from '../lib/serviceItems'
 
 /** String amount charged at tokenize + server createPayment; must match `DEPOSIT_CENTS` in `server/depositData.ts`. */
 const DEPOSIT_AMOUNT_STRING = '25.00'
@@ -145,7 +151,7 @@ export function BookingSection() {
   const [email, setEmail] = useState('')
   const [phone, setPhone] = useState('')
   const [billingPostal, setBillingPostal] = useState('')
-  const [service, setService] = useState<string>(SERVICE_KEYS[0])
+  const [service, setService] = useState<ServiceItemId>(DEFAULT_SERVICE_ID)
   const [slot, setSlot] = useState('')
   const [note, setNote] = useState('')
   const [terms, setTerms] = useState(false)
@@ -333,7 +339,7 @@ export function BookingSection() {
   }
 
   function serviceLabel(): string {
-    return t(`booking.services.${service}` as 'booking.services.cut')
+    return t(`booking.svcItem.${service}` as 'booking.svcItem.corte_mujer')
   }
 
   async function handlePay(e: React.FormEvent) {
@@ -446,7 +452,7 @@ export function BookingSection() {
           name: name.trim(),
           email: email.trim(),
           phone: phone.trim(),
-          service: `${serviceLabel()} (${service})`,
+          service: serviceLabel(),
           slotStart,
           termsAccepted: true,
           note: noteCombined,
@@ -561,7 +567,7 @@ export function BookingSection() {
       aria-label={t('booking.title')}
       className="scroll-mt-24 border-y border-gold-400/20 bg-black/40 px-4 py-14 sm:px-6"
     >
-      <div className="mx-auto max-w-xl">
+      <div className="mx-auto max-w-4xl">
         <h2 className="text-center font-serif text-3xl font-medium text-gold-300 sm:text-4xl">
           {t('booking.title')}
         </h2>
@@ -571,6 +577,24 @@ export function BookingSection() {
         <p className="mt-2 text-center font-condensed text-lg font-bold text-gold-200">
           {t('booking.depositLabel')}
         </p>
+        <p className="mx-auto mt-4 max-w-2xl text-center text-xs leading-relaxed text-white/60 sm:text-sm">
+          {t('booking.menuIntro')}
+        </p>
+        <div className="mt-6 max-h-[min(70vh,520px)] overflow-y-auto rounded-xl border border-gold-400/20 bg-black/50 p-4 sm:p-5">
+          <div className="grid gap-6 md:grid-cols-2 md:gap-8">
+            <div>
+              <h3 className="mb-3 font-serif text-base text-gold-200 sm:text-lg">{t('services.hairTitle')}</h3>
+              <FullServiceMenu t={t} serviceIds={SERVICES_PAGE_HAIR_IDS} />
+            </div>
+            <div>
+              <h3 className="mb-3 font-serif text-base text-gold-200 sm:text-lg">{t('services.beautyTitle')}</h3>
+              <FullServiceMenu t={t} serviceIds={SERVICES_PAGE_BEAUTY_IDS} />
+            </div>
+          </div>
+          <p className="mt-4 text-center text-[0.7rem] leading-relaxed text-white/45 sm:text-xs">
+            {t('services.footnote')}
+          </p>
+        </div>
         {showSandboxNotice && (
           <p
             className="mt-4 rounded-lg border border-amber-400/40 bg-amber-500/10 px-4 py-3 text-sm leading-relaxed text-amber-100/95"
@@ -591,7 +615,7 @@ export function BookingSection() {
 
         <form
           onSubmit={(e) => void handlePay(e)}
-          className="mt-10 flex flex-col gap-5 rounded-xl border border-gold-400/25 bg-black/60 p-6 backdrop-blur-sm"
+          className="mx-auto mt-10 flex w-full max-w-xl flex-col gap-5 rounded-xl border border-gold-400/25 bg-black/60 p-6 backdrop-blur-sm"
         >
           <label className="flex flex-col gap-1">
             <span className="font-condensed text-xs font-bold uppercase tracking-wider text-white/80">
@@ -633,13 +657,17 @@ export function BookingSection() {
             </span>
             <select
               value={service}
-              onChange={(e) => setService(e.target.value)}
+              onChange={(e) => setService(e.target.value as ServiceItemId)}
               className="rounded-lg border border-white/15 bg-black/80 px-3 py-2.5 text-white outline-none ring-gold-400/40 focus:ring-2"
             >
-              {SERVICE_KEYS.map((k) => (
-                <option key={k} value={k}>
-                  {t(`booking.services.${k}`)}
-                </option>
+              {getServiceSelectGroups().map(({ group, ids }) => (
+                <optgroup key={group} label={t(`booking.svcGroup.${group}` as 'booking.svcGroup.grp_cortes')}>
+                  {ids.map((id) => (
+                    <option key={id} value={id}>
+                      {t(`booking.svcItem.${id}` as 'booking.svcItem.corte_mujer')}
+                    </option>
+                  ))}
+                </optgroup>
               ))}
             </select>
           </label>

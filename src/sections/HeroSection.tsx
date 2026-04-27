@@ -1,10 +1,8 @@
-import { useEffect, useRef } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Link } from 'react-router-dom'
 import { motion, useReducedMotion } from 'framer-motion'
 import { MotionSection } from '../components/MotionSection'
 import { TIKTOK_URL, WHATSAPP_HREF } from '../constants'
-import heroLogoVideo from '../assets/hero-logo.mp4'
 
 function WhatsAppIcon({ className }: { className?: string }) {
   return (
@@ -27,20 +25,6 @@ const easeLux = [0.22, 1, 0.36, 1] as const
 export function HeroSection() {
   const { t } = useTranslation()
   const reduce = useReducedMotion()
-  const heroVideoRef = useRef<HTMLVideoElement>(null)
-
-  useEffect(() => {
-    const el = heroVideoRef.current
-    if (!el) return
-    el.muted = true
-    if (reduce) {
-      el.pause()
-      return
-    }
-    void el.play().catch(() => {
-      /* Autoplay can be blocked until gesture; <video autoPlay> still helps. */
-    })
-  }, [reduce])
 
   const btnBase =
     'inline-flex min-h-[3.25rem] w-full shrink-0 items-center justify-center gap-2 rounded-lg px-4 font-condensed text-xs font-bold uppercase tracking-[0.12em] sm:w-auto sm:min-w-[9.25rem] sm:gap-2.5 sm:px-5 sm:text-sm sm:tracking-[0.14em] md:min-w-[10.25rem]'
@@ -59,38 +43,34 @@ export function HeroSection() {
         animate={{ opacity: 1 }}
         transition={{ duration: 0.65, ease: easeLux }}
       >
-        {/* Background video — full bleed, cropped, not a giant “strip” */}
-        <video
-          ref={heroVideoRef}
-          src={heroLogoVideo}
-          className="absolute inset-0 z-0 h-full w-full min-h-full min-w-full object-cover object-center will-change-transform [transform:translateZ(0)] [backface-visibility:hidden]"
-          style={{ objectPosition: 'center center' }}
-          autoPlay
-          loop
-          muted
-          playsInline
-          preload="auto"
-          aria-hidden
-        />
-
-        {/* Slightly dark scrim + readable text; not as heavy as first dark pass */}
+        {/* Static hero (no background video) — deep gradient with subtle gold sheen */}
         <div
-          className="absolute inset-0 z-[1] bg-gradient-to-b from-black/50 via-black/25 to-black/50"
+          className="absolute inset-0 z-0 bg-[radial-gradient(ellipse_90%_60%_at_50%_20%,rgba(180,150,60,0.12),transparent_55%),radial-gradient(ellipse_70%_50%_at_50%_100%,rgba(0,0,0,0.5),#050505)]"
           aria-hidden
         />
         <div
-          className="absolute inset-0 z-[1] bg-gradient-to-t from-black/60 via-black/8 to-black/30"
+          className="absolute inset-0 z-[1] bg-gradient-to-b from-black/40 via-black/20 to-black/50"
+          aria-hidden
+        />
+        <div
+          className="absolute inset-0 z-[1] bg-gradient-to-t from-black/70 via-transparent to-black/40"
           aria-hidden
         />
 
         {/* One stack: brand + taglines + actions — all on top of the same hero */}
         <div className="relative z-10 mx-auto flex min-h-[min(72vh,720px)] max-h-[min(88vh,900px)] w-full max-w-3xl flex-col items-center justify-center px-4 py-12 text-center sm:px-6 sm:py-20">
           <h1
-            className="m-0 max-w-2xl font-serif text-base font-semibold leading-tight tracking-[0.12em] text-gold-200 sm:text-lg md:text-xl"
-            style={{ textShadow: '0 2px 16px rgba(0,0,0,0.8)' }}
+            className="m-0 max-w-3xl font-serif text-2xl font-semibold leading-tight tracking-[0.14em] text-gold-200 sm:text-3xl md:text-4xl"
+            style={{ textShadow: '0 2px 24px rgba(0,0,0,0.85), 0 0 40px rgba(180,150,60,0.12)' }}
           >
             {t('hero.brand')}
           </h1>
+          <p
+            className="mt-3 font-condensed text-xs uppercase tracking-[0.2em] text-gold-400/70"
+            style={{ textShadow: '0 1px 8px rgba(0,0,0,0.9)' }}
+          >
+            {t('hero.wordmarkSub')}
+          </p>
 
           <div className="mt-5 max-w-2xl space-y-3 sm:mt-6 sm:space-y-3.5">
             <motion.p

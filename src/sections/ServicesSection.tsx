@@ -1,6 +1,8 @@
 import { motion, useReducedMotion } from 'framer-motion'
 import { useTranslation } from 'react-i18next'
+import { FullServiceMenu } from '../components/FullServiceMenu'
 import { MotionSection } from '../components/MotionSection'
+import { SERVICES_PAGE_BEAUTY_IDS, SERVICES_PAGE_HAIR_IDS } from '../lib/serviceItems'
 
 const easeLux = [0.22, 1, 0.36, 1] as const
 
@@ -58,24 +60,30 @@ export function ServicesSection() {
             className="rounded-2xl border border-gold-400/30 bg-gradient-to-br from-black/90 via-zinc-950/80 to-gold-500/10 p-6 shadow-lg sm:p-7"
           >
             <h3 className="font-serif text-lg text-gold-200 sm:text-xl">{t('services.hairTitle')}</h3>
-            <p className="mt-4 whitespace-pre-line text-sm leading-relaxed text-white/85 sm:text-[0.95rem]">
-              {t('services.hairBody')}
-            </p>
+            <div className="mt-4">
+              <FullServiceMenu t={t} serviceIds={SERVICES_PAGE_HAIR_IDS} />
+            </div>
           </motion.div>
           <motion.div
             variants={vItem}
             className="rounded-2xl border border-gold-400/30 bg-gradient-to-br from-black/90 via-zinc-950/80 to-gold-500/10 p-6 shadow-lg sm:p-7"
           >
             <h3 className="font-serif text-lg text-gold-200 sm:text-xl">{t('services.beautyTitle')}</h3>
-            <p className="mt-4 whitespace-pre-line text-sm leading-relaxed text-white/85 sm:text-[0.95rem]">
-              {t('services.beautyBody')}
-            </p>
+            <div className="mt-4">
+              <FullServiceMenu t={t} serviceIds={SERVICES_PAGE_BEAUTY_IDS} />
+            </div>
           </motion.div>
         </div>
 
         <motion.p
           variants={vItem}
-          className="mt-10 text-center text-sm leading-relaxed text-white/88 sm:text-base"
+          className="mt-6 text-center text-xs leading-relaxed text-white/55 sm:text-sm"
+        >
+          {t('services.footnote')}
+        </motion.p>
+        <motion.p
+          variants={vItem}
+          className="mt-6 text-center text-sm leading-relaxed text-white/88 sm:text-base"
         >
           {t('services.closing')}
         </motion.p>
