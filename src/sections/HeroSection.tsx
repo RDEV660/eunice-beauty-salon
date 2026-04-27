@@ -57,22 +57,26 @@ export function HeroSection() {
           aria-hidden
         />
 
-        {/* One stack: brand + taglines + actions — all on top of the same hero */}
+        {/* One stack: logo image + taglines + actions — all on top of the same hero */}
         <div className="relative z-10 mx-auto flex min-h-[min(72vh,720px)] max-h-[min(88vh,900px)] w-full max-w-3xl flex-col items-center justify-center px-4 py-12 text-center sm:px-6 sm:py-20">
-          <h1
-            className="m-0 max-w-3xl font-serif text-2xl font-semibold leading-tight tracking-[0.14em] text-gold-200 sm:text-3xl md:text-4xl"
-            style={{ textShadow: '0 2px 24px rgba(0,0,0,0.85), 0 0 40px rgba(180,150,60,0.12)' }}
+          <motion.h1
+            className="m-0 flex w-full max-w-2xl justify-center px-1 sm:max-w-3xl md:max-w-4xl"
+            initial={reduce ? false : { opacity: 0, y: 12 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: reduce ? 0 : 0.55, ease: easeLux }}
           >
-            {t('hero.brand')}
-          </h1>
-          <p
-            className="mt-3 font-condensed text-xs uppercase tracking-[0.2em] text-gold-400/70"
-            style={{ textShadow: '0 1px 8px rgba(0,0,0,0.9)' }}
-          >
-            {t('hero.wordmarkSub')}
-          </p>
+            <img
+              src="/hero-logo.png"
+              alt={t('hero.logoAlt')}
+              width={960}
+              height={280}
+              loading="eager"
+              decoding="async"
+              className="h-auto w-full max-w-[min(100%,42rem)] object-contain object-center [filter:drop-shadow(0_6px_28px_rgba(0,0,0,0.75))]"
+            />
+          </motion.h1>
 
-          <div className="mt-5 max-w-2xl space-y-3 sm:mt-6 sm:space-y-3.5">
+          <div className="mt-6 max-w-2xl space-y-3 sm:mt-8 sm:space-y-3.5">
             <motion.p
               className="font-condensed text-sm leading-snug text-white/95 sm:text-base"
               style={{ textShadow: '0 1px 3px rgba(0,0,0,0.9)' }}
