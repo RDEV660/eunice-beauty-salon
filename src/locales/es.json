@@ -65,6 +65,23 @@
     "hoursLine": "📅 Lun–Sáb 10am–6pm — cita o sin cita.",
     "tagline": "Tu cabello, nuestra pasión — ¡luce increíble todos los días!"
   },
+  "gallery": {
+    "title": "Momentos en el salón",
+    "subtitle": "Mirá nuestras sillas, la cabina y resultados reales — desliza o tocá los minis para navegar.",
+    "prevAria": "Foto anterior",
+    "nextAria": "Foto siguiente",
+    "thumbAria": "Ver imagen {{n}}",
+    "counter": "{{current}} / {{total}}",
+    "slides": {
+      "s1": "Cliente con cabello ondulado cobrizo en nuestra sala de estilo.",
+      "s2": "Cabina de tratamientos — camilla, muebles y tono verde.",
+      "s3": "Antes y después — alisado permanente lacio y brillante.",
+      "s4": "Paquete premium — peinado formal con tocado.",
+      "s5": "Serum hemp para el cabello y estilo en el salón.",
+      "s6": "Antes de coloración — raíces y coronilla listas para renovación.",
+      "s7": "Paquete Silver — recogido bajo elegante con tiara."
+    }
+  },
   "booking": {
     "metaTitle": "Reservar — Eunice Beauty Salon",
     "metaDescription": "Apartar con depósito de $25. No reembolsable; se aplica a tu visita.",

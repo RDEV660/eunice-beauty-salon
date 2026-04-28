@@ -65,6 +65,23 @@
     "hoursLine": "📅 Mon–Sat 10am–6pm — appointments and walk-ins welcome.",
     "tagline": "Your hair, our passion — look incredible every day."
   },
+  "gallery": {
+    "title": "Salon snapshots",
+    "subtitle": "A peek inside our chairs, rooms, and real results — swipe or use the thumbnails to browse.",
+    "prevAria": "Previous photo",
+    "nextAria": "Next photo",
+    "thumbAria": "Show image {{n}}",
+    "counter": "{{current}} / {{total}}",
+    "slides": {
+      "s1": "Guest with warm copper-tone wavy hair in the salon styling chair.",
+      "s2": "Beauty treatment room with white bed, cabinets, and green accent wall.",
+      "s3": "Before and after permanent hair smoothing — silky, shiny finish.",
+      "s4": "Premium bridal package — formal updo with tiara styling.",
+      "s5": "Wellness hemp hair serum and professional styling at the salon.",
+      "s6": "Hair before color correction — crown and roots ready for renewal.",
+      "s7": "Silver package styling — elegant low bun updo with tiara."
+    }
+  },
   "booking": {
     "metaTitle": "Book — Eunice Beauty Salon",
     "metaDescription": "Reserve with a $25 deposit. Non-refundable; applies to your visit.",
