@@ -110,22 +110,22 @@ export function GallerySection() {
   return (
     <MotionSection
       id="gallery"
-      className="scroll-mt-20 border-y border-gold-400/15 bg-gradient-to-b from-[#060606] via-[#080808] to-[#050505] px-4 py-16 sm:px-6"
+      className="scroll-mt-20 border-y border-gold-400/15 bg-gradient-to-b from-[#060606] via-[#080808] to-[#050505] px-4 py-10 sm:py-12 sm:px-6"
       aria-labelledby="gallery-heading"
     >
-      <div className="mx-auto max-w-6xl">
+      <div className="mx-auto max-w-4xl">
         <h2
           id="gallery-heading"
-          className="text-center font-serif text-2xl font-medium text-gold-300 sm:text-3xl md:text-4xl"
+          className="text-center font-serif text-xl font-medium text-gold-300 sm:text-2xl md:text-3xl"
         >
           {t('gallery.title')}
         </h2>
-        <p className="mx-auto mt-3 max-w-2xl text-center text-sm leading-relaxed text-white/75 sm:text-base">
+        <p className="mx-auto mt-2 max-w-xl text-center text-xs leading-relaxed text-white/72 sm:text-sm">
           {t('gallery.subtitle')}
         </p>
 
         <div
-          className="mt-10 flex flex-col gap-6 lg:mt-12 lg:flex-row lg:items-stretch lg:gap-8 lg:gap-10"
+          className="mt-6 flex flex-col gap-4 sm:mt-8 lg:mt-9 lg:flex-row lg:items-start lg:justify-center lg:gap-5"
           onMouseEnter={() => setPaused(true)}
           onMouseLeave={() => setPaused(false)}
           onFocusCapture={() => setPaused(true)}
@@ -143,16 +143,16 @@ export function GallerySection() {
           >
             <div
               className={[
-                'relative mx-auto w-full max-w-lg lg:mx-0 lg:max-w-none',
-                'rounded-sm p-[9px] sm:p-[13px]',
+                'relative mx-auto w-full max-w-[min(15.5rem,calc(100vw-2.5rem))] sm:max-w-[min(17.5rem,calc(100vw-3rem))] lg:mx-0 lg:w-[min(17.75rem,calc((100vw-8rem)*0.45))]',
+                'rounded-sm p-1.5 sm:p-[7px]',
                 'bg-[linear-gradient(152deg,#1f1a13_0%,#887456_42%,#2a251c_62%,#1a1712_100%)]',
                 'shadow-[inset_0_1px_0_rgba(255,230,200,0.16),inset_0_-2px_8px_rgba(0,0,0,0.45)]',
                 'ring-1 ring-amber-500/35',
               ].join(' ')}
             >
               {/* inner mat */}
-              <div className="relative overflow-hidden rounded-sm bg-neutral-950 p-1 shadow-[inset_0_0_0_1px_rgba(0,0,0,0.65)] ring-1 ring-black/55">
-                <div className="relative aspect-[3/4] w-full bg-gradient-to-br from-neutral-950 to-black sm:aspect-[3/4]">
+              <div className="relative overflow-hidden rounded-sm bg-neutral-950 p-0.5 shadow-[inset_0_0_0_1px_rgba(0,0,0,0.65)] ring-1 ring-black/55">
+                <div className="relative mx-auto aspect-[3/4] w-full bg-gradient-to-br from-neutral-950 to-black">
                   {!reduce ? (
                     <AnimatePresence initial={false} custom={direction} mode="popLayout">
                       <motion.div
@@ -168,7 +168,7 @@ export function GallerySection() {
                           src={src}
                           alt={t(`gallery.slides.s${index + 1}`)}
                           className="h-full w-full object-contain object-center"
-                          sizes="(min-width: 1024px) 42vw, 90vw"
+                          sizes="(min-width: 1024px) 280px, min(90vw, 280px)"
                           loading={index === 0 ? 'eager' : 'lazy'}
                           decoding="async"
                           draggable={false}
@@ -180,7 +180,7 @@ export function GallerySection() {
                       src={src}
                       alt={t(`gallery.slides.s${index + 1}`)}
                       className="h-full w-full object-contain object-center"
-                      sizes="(min-width: 1024px) 42vw, 90vw"
+                      sizes="(min-width: 1024px) 280px, min(90vw, 280px)"
                       loading={index === 0 ? 'eager' : 'lazy'}
                       decoding="async"
                       draggable={false}
@@ -193,34 +193,34 @@ export function GallerySection() {
               <button
                 type="button"
                 onClick={goPrev}
-                className="absolute left-2 top-1/2 z-10 flex h-11 w-11 -translate-y-1/2 items-center justify-center rounded-full border border-white/18 bg-black/55 text-white/92 shadow-lg backdrop-blur-sm transition-colors hover:bg-black/72 hover:border-gold-400/45 sm:left-4"
+                className="absolute left-1.5 top-1/2 z-10 flex h-8 w-8 -translate-y-1/2 items-center justify-center rounded-full border border-white/18 bg-black/55 text-white/92 shadow-md backdrop-blur-sm transition-colors hover:bg-black/72 hover:border-gold-400/45 sm:left-2.5"
                 aria-label={t('gallery.prevAria')}
               >
-                <Chevron dir="left" className="h-6 w-6" />
+                <Chevron dir="left" className="h-4 w-4" />
               </button>
               <button
                 type="button"
                 onClick={goNext}
-                className="absolute right-2 top-1/2 z-10 flex h-11 w-11 -translate-y-1/2 items-center justify-center rounded-full border border-white/18 bg-black/55 text-white/92 shadow-lg backdrop-blur-sm transition-colors hover:bg-black/72 hover:border-gold-400/45 sm:right-4"
+                className="absolute right-1.5 top-1/2 z-10 flex h-8 w-8 -translate-y-1/2 items-center justify-center rounded-full border border-white/18 bg-black/55 text-white/92 shadow-md backdrop-blur-sm transition-colors hover:bg-black/72 hover:border-gold-400/45 sm:right-2.5"
                 aria-label={t('gallery.nextAria')}
               >
-                <Chevron dir="right" className="h-6 w-6" />
+                <Chevron dir="right" className="h-4 w-4" />
               </button>
 
-              <p className="pointer-events-none absolute bottom-3 left-1/2 z-10 -translate-x-1/2 rounded-full border border-white/12 bg-black/55 px-3 py-1 font-condensed text-[0.65rem] font-semibold tabular-nums tracking-wider text-white/88 backdrop-blur-sm sm:bottom-4 sm:text-xs">
+              <p className="pointer-events-none absolute bottom-2 left-1/2 z-10 -translate-x-1/2 rounded-full border border-white/12 bg-black/55 px-2.5 py-0.5 font-condensed text-[0.58rem] font-semibold tabular-nums tracking-wider text-white/88 backdrop-blur-sm sm:bottom-2.5 sm:text-[0.65rem]">
                 {t('gallery.counter', { current: index + 1, total: GALLERY_SLIDE_COUNT })}
               </p>
             </div>
 
             {/* mobile thumbnail strip */}
-            <div className="mt-4 flex gap-2 overflow-x-auto pb-2 [-ms-overflow-style:none] [scrollbar-width:none] lg:hidden [&::-webkit-scrollbar]:hidden">
+            <div className="mt-3 flex gap-1.5 overflow-x-auto pb-1 [-ms-overflow-style:none] [scrollbar-width:none] lg:hidden [&::-webkit-scrollbar]:hidden">
               {slideIds.map((i) => (
                 <button
                   key={i}
                   type="button"
                   data-gallery-thumb={i}
                   onClick={() => goToSlide(i)}
-                  className={`relative h-24 w-[4.75rem] shrink-0 snap-start overflow-hidden rounded-md border transition ring-offset-2 ring-offset-[#070707] focus:outline-none focus-visible:ring-2 focus-visible:ring-gold-400/60 ${
+                  className={`relative h-16 w-12 shrink-0 snap-start overflow-hidden rounded border transition ring-offset-2 ring-offset-[#070707] focus:outline-none focus-visible:ring-2 focus-visible:ring-gold-400/60 ${
                     i === index
                       ? 'border-amber-400/70 shadow-[0_0_0_1px_rgba(212,165,65,0.35)] ring-amber-400/60'
                       : 'border-white/14 opacity-[0.88] hover:border-gold-400/35 hover:opacity-100'
@@ -235,9 +235,9 @@ export function GallerySection() {
           </div>
 
           {/* desktop: vertical thumbnails on the side */}
-          <aside className="hidden w-[5.85rem] shrink-0 flex-col gap-2.5 self-stretch lg:flex">
+          <aside className="hidden w-[4rem] shrink-0 flex-col self-start pt-0.5 lg:flex xl:w-[4.35rem]">
             <nav
-              className="flex max-h-[min(70vh,640px)] flex-col gap-2.5 overflow-y-auto pb-1 pr-0.5"
+              className="flex max-h-[min(52vh,20rem)] flex-col gap-1.5 overflow-y-auto pb-1 pr-0.5"
               ref={thumbStripRef}
             >
               {slideIds.map((i) => (
@@ -246,7 +246,7 @@ export function GallerySection() {
                   type="button"
                   data-gallery-thumb={i}
                   onClick={() => goToSlide(i)}
-                  className={`group relative aspect-[3/4] w-full shrink-0 overflow-hidden rounded-md border text-left shadow-md transition ring-offset-2 ring-offset-[#070707] focus:outline-none focus-visible:ring-2 focus-visible:ring-gold-400/60 ${
+                  className={`group relative aspect-[3/4] w-full shrink-0 overflow-hidden rounded border text-left shadow-sm transition ring-offset-2 ring-offset-[#070707] focus:outline-none focus-visible:ring-2 focus-visible:ring-gold-400/60 ${
                     i === index
                       ? 'border-amber-400/75 ring-[3px] ring-amber-500/55'
                       : 'border-white/14 hover:border-gold-400/40 hover:brightness-105'
