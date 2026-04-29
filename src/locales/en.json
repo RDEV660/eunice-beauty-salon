@@ -67,11 +67,7 @@
   },
   "gallery": {
     "title": "Salon snapshots",
-    "subtitle": "A peek inside our chairs, rooms, and real results — swipe or use the thumbnails to browse.",
-    "prevAria": "Previous photo",
-    "nextAria": "Next photo",
-    "thumbAria": "Show image {{n}}",
-    "counter": "{{current}} / {{total}}",
+    "subtitle": "Our chairs, treatment room, and real results — a peek inside the salon.",
     "slides": {
       "s1": "Guest with warm copper-tone wavy hair in the salon styling chair.",
       "s2": "Beauty treatment room with white bed, cabinets, and green accent wall.",

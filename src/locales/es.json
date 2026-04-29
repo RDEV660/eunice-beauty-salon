@@ -67,11 +67,7 @@
   },
   "gallery": {
     "title": "Momentos en el salón",
-    "subtitle": "Mirá nuestras sillas, la cabina y resultados reales — desliza o tocá los minis para navegar.",
-    "prevAria": "Foto anterior",
-    "nextAria": "Foto siguiente",
-    "thumbAria": "Ver imagen {{n}}",
-    "counter": "{{current}} / {{total}}",
+    "subtitle": "Nuestra sala, la cabina y resultados reales — un vistazo al salón.",
     "slides": {
       "s1": "Cliente con cabello ondulado cobrizo en nuestra sala de estilo.",
       "s2": "Cabina de tratamientos — camilla, muebles y tono verde.",

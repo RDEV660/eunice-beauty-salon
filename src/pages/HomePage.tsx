@@ -13,8 +13,8 @@ export function HomePage() {
     <div className="relative isolate min-h-svh bg-[#050505]">
       <main className="relative">
         <HeroSection />
-        <ServicesSection />
         <GallerySection />
+        <ServicesSection />
         <TestimonialsSection />
         <MapSection />
         <ContactSection />
