@@ -12,6 +12,9 @@ export function DocumentMeta() {
     if (pathname.startsWith('/book/success')) {
       title = t('confirmed.metaTitle')
       description = t('confirmed.metaDescription')
+    } else if (pathname.startsWith('/gallery')) {
+      title = t('gallery.metaTitle')
+      description = t('gallery.metaDescription')
     } else if (pathname.startsWith('/book')) {
       title = t('booking.metaTitle')
       description = t('booking.metaDescription')

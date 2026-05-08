@@ -5,9 +5,13 @@ import type { To } from 'react-router-dom'
 import { HeaderNavLink } from './HeaderNavLink'
 import { LanguageSwitch } from './LanguageSwitch'
 
-const homeLinks: { to: To; key: 'nav.home' | 'nav.services' | 'nav.book' | 'nav.location' | 'nav.contact' }[] = [
+const homeLinks: {
+  to: To
+  key: 'nav.home' | 'nav.services' | 'nav.gallery' | 'nav.book' | 'nav.location' | 'nav.contact'
+}[] = [
   { to: { pathname: '/', hash: '#home' }, key: 'nav.home' },
   { to: { pathname: '/', hash: '#services' }, key: 'nav.services' },
+  { to: '/gallery', key: 'nav.gallery' },
   { to: '/book', key: 'nav.book' },
   { to: { pathname: '/', hash: '#location' }, key: 'nav.location' },
   { to: { pathname: '/', hash: '#contact' }, key: 'nav.contact' },

@@ -9,6 +9,7 @@
   "nav": {
     "home": "Inicio",
     "services": "Servicios",
+    "gallery": "Galería",
     "book": "Reservar",
     "location": "Ubicación",
     "contact": "Contacto",
@@ -67,15 +68,20 @@
   },
   "gallery": {
     "title": "Momentos en el salón",
-    "subtitle": "Nuestra sala, la cabina y resultados reales — un vistazo al salón.",
+    "pageSubtitle": "Sala, cabina y estilos que nos encantan — desplázate para ver todas las fotos.",
+    "teaserSubtitle": "Un adelanto de nuestro espacio y nuestro trabajo. Abre la galería para ver todas las fotos.",
+    "openFull": "Ver galería completa",
+    "photoCount_one": "{{count}} foto",
+    "photoCount_other": "{{count}} fotos",
+    "metaTitle": "Galería — Eunice Beauty Salon",
+    "metaDescription": "Fotos de Eunice Beauty Salon en Palmview Sur, TX — el salón, tratamientos y estilos.",
     "slides": {
       "s1": "Cliente con cabello ondulado cobrizo en nuestra sala de estilo.",
       "s2": "Cabina de tratamientos — camilla, muebles y tono verde.",
       "s3": "Antes y después — alisado permanente lacio y brillante.",
       "s4": "Paquete premium — peinado formal con tocado.",
       "s5": "Serum hemp para el cabello y estilo en el salón.",
-      "s6": "Antes de coloración — raíces y coronilla listas para renovación.",
-      "s7": "Paquete Silver — recogido bajo elegante con tiara."
+      "s6": "Paquete Silver — recogido bajo elegante con tiara."
     }
   },
   "booking": {

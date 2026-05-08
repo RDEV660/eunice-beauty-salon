@@ -9,6 +9,7 @@
   "nav": {
     "home": "Home",
     "services": "Services",
+    "gallery": "Gallery",
     "book": "Book",
     "location": "Location",
     "contact": "Contact",
@@ -67,15 +68,20 @@
   },
   "gallery": {
     "title": "Salon snapshots",
-    "subtitle": "Our chairs, treatment room, and real results — a peek inside the salon.",
+    "pageSubtitle": "Chairs, treatment room, and styles we love — scroll the full set below.",
+    "teaserSubtitle": "A quick peek at our space and work. Open the gallery for the full photo set.",
+    "openFull": "View full gallery",
+    "photoCount_one": "{{count}} photo",
+    "photoCount_other": "{{count}} photos",
+    "metaTitle": "Gallery — Eunice Beauty Salon",
+    "metaDescription": "Photos from Eunice Beauty Salon in Palmview South, TX — salon space, treatments, and client styles.",
     "slides": {
       "s1": "Guest with warm copper-tone wavy hair in the salon styling chair.",
       "s2": "Beauty treatment room with white bed, cabinets, and green accent wall.",
       "s3": "Before and after permanent hair smoothing — silky, shiny finish.",
       "s4": "Premium bridal package — formal updo with tiara styling.",
       "s5": "Wellness hemp hair serum and professional styling at the salon.",
-      "s6": "Hair before color correction — crown and roots ready for renewal.",
-      "s7": "Silver package styling — elegant low bun updo with tiara."
+      "s6": "Silver package styling — elegant low bun updo with tiara."
     }
   },
   "booking": {

@@ -1,6 +1,6 @@
 import { useScrollToHash } from '../hooks/useScrollToHash'
 import { ContactSection } from '../sections/ContactSection'
-import { GallerySection } from '../sections/GallerySection'
+import { GalleryTeaserSection } from '../sections/GalleryTeaserSection'
 import { HeroSection } from '../sections/HeroSection'
 import { MapSection } from '../sections/MapSection'
 import { ServicesSection } from '../sections/ServicesSection'
@@ -13,7 +13,7 @@ export function HomePage() {
     <div className="relative isolate min-h-svh bg-[#050505]">
       <main className="relative">
         <HeroSection />
-        <GallerySection />
+        <GalleryTeaserSection />
         <ServicesSection />
         <TestimonialsSection />
         <MapSection />

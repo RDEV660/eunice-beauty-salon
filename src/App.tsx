@@ -4,6 +4,7 @@ import { Header } from './components/Header'
 import { AdminAvailabilityPage } from './pages/AdminAvailabilityPage'
 import { BookPage } from './pages/BookPage'
 import { BookSuccessPage } from './pages/BookSuccessPage'
+import { GalleryPage } from './pages/GalleryPage'
 import { HomePage } from './pages/HomePage'
 
 function App() {
@@ -15,6 +16,7 @@ function App() {
         <Header />
         <Routes>
           <Route path="/" element={<HomePage />} />
+          <Route path="/gallery" element={<GalleryPage />} />
           <Route path="/book" element={<BookPage />} />
           <Route path="/book/success" element={<BookSuccessPage />} />
           <Route path="/admin/availability" element={<AdminAvailabilityPage />} />

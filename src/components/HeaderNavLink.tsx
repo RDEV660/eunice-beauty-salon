@@ -16,7 +16,10 @@ export function HeaderNavLink({ to, className, children }: Props) {
 
   const onClick = (e: MouseEvent<HTMLAnchorElement>) => {
     if (typeof to === 'string') {
-      if (to === '/book' && location.pathname === '/book') {
+      if (
+        (to === '/book' && location.pathname === '/book') ||
+        (to === '/gallery' && location.pathname === '/gallery')
+      ) {
         e.preventDefault()
         window.scrollTo({ top: 0, behavior: 'smooth' })
       }
