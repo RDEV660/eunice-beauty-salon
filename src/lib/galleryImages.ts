@@ -9,7 +9,7 @@ export type GalleryItem = { file: string }
 /** First N thumbnails use per-photo `gallery.slides.s1` … keys; the rest use `gallery.slideAltExtra`. */
 export const GALLERY_DETAILED_ALT_COUNT = 6
 
-export const GALLERY_IMAGE_COUNT = 30
+export const GALLERY_IMAGE_COUNT = 21
 
 export const GALLERY_ITEMS: readonly GalleryItem[] = Array.from({ length: GALLERY_IMAGE_COUNT }, (_, i) => {
   const n = i + 1
