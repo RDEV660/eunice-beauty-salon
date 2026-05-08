@@ -1,7 +1,7 @@
 import { motion, useReducedMotion } from 'framer-motion'
 import { useTranslation } from 'react-i18next'
 
-import { GALLERY_ITEMS, gallerySrc } from '../lib/galleryImages'
+import { GALLERY_DETAILED_ALT_COUNT, GALLERY_ITEMS, gallerySrc } from '../lib/galleryImages'
 
 const easeLux = [0.22, 1, 0.36, 1] as const
 
@@ -30,7 +30,11 @@ export function GalleryGrid() {
           <div className="relative aspect-[3/4] w-full">
             <img
               src={gallerySrc(item)}
-              alt={t(`gallery.slides.s${i + 1}`)}
+              alt={
+                i < GALLERY_DETAILED_ALT_COUNT
+                  ? t(`gallery.slides.s${i + 1}`)
+                  : t('gallery.slideAltExtra')
+              }
               className="h-full w-full object-cover object-center transition duration-500 ease-out group-hover:scale-[1.04]"
               loading={i < 2 ? 'eager' : 'lazy'}
               decoding="async"

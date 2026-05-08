@@ -1,19 +1,21 @@
 /**
- * Salon gallery — one entry per file in `public/gallery/`.
- * To add photos: drop a new PNG/WebP here and append `{ file: 'gallery-08.png' }`.
- * To remove one: delete its row (and the file from `public/gallery/` if unused).
+ * Salon gallery — files in `public/gallery/gallery-01.png` … `gallery-NN.png`.
+ *
+ * To change how many images ship: update `GALLERY_IMAGE_COUNT` and add/remove
+ * files to match (always zero-padded two-digit names).
  */
 export type GalleryItem = { file: string }
 
-export const GALLERY_ITEMS: readonly GalleryItem[] = [
-  { file: 'gallery-01.png' },
-  { file: 'gallery-02.png' },
-  { file: 'gallery-03.png' },
-  { file: 'gallery-04.png' },
-  { file: 'gallery-05.png' },
-  /* gallery-06 removed per owner request */
-  { file: 'gallery-07.png' },
-] as const
+/** First N thumbnails use per-photo `gallery.slides.s1` … keys; the rest use `gallery.slideAltExtra`. */
+export const GALLERY_DETAILED_ALT_COUNT = 6
+
+export const GALLERY_IMAGE_COUNT = 30
+
+export const GALLERY_ITEMS: readonly GalleryItem[] = Array.from({ length: GALLERY_IMAGE_COUNT }, (_, i) => {
+  const n = i + 1
+  const pad = n < 10 ? `0${n}` : String(n)
+  return { file: `gallery-${pad}.png` }
+})
 
 export function gallerySrc(item: GalleryItem): string {
   return `/gallery/${item.file}`
